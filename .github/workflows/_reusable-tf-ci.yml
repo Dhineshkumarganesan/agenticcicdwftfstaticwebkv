@@ -38,7 +38,7 @@ jobs:
 
       - name: Terraform plan (no backend)
         working-directory: ${{ inputs.infra_path }}
-        run: terraform plan -backend=false
+        run: terraform plan
 
       - name: Sanitize artifact name
         id: artifact-name

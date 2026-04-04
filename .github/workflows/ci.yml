@@ -21,11 +21,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Minimum workflow-level permissions.
-# id-token:write required because the reusable TF-CI workflow requests an OIDC token.
+# Minimum workflow-level permissions. security-events:write is scoped to iac-scan job only.
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   # ---------------------------------------------------------------------------
