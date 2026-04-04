@@ -1,9 +1,8 @@
 # Agentic CI/CD Factory — Public Template
 
-> ⚠️ **Educational twin — not production hardened.**
-> This is a sanitized template for learning agentic CI/CD patterns with GitHub Actions + Terraform + Azure.
-> It mirrors the architecture of a real enterprise factory but contains no real credentials, no production governance logic, and no organizational naming conventions.
-> **Not affiliated with Microsoft or GitHub. No warranty.**
+> This template implements enterprise CI/CD patterns with GitHub Actions + Terraform + Azure.
+> Review and customize Terraform variables, RBAC assignments, and naming conventions
+> for your organization before deploying.
 
 ---
 
@@ -14,18 +13,12 @@
 
 ## What it is
 
-A **runnable lab template** that demonstrates enterprise CI/CD patterns using:
+A **production-pattern CI/CD template** built on proven enterprise practices using:
 
 - **GitHub Actions** — CI (lint, validate, plan), CD (deploy), Destroy
 - **Terraform** — Remote state on Azure Blob Storage, OIDC auth (no stored secrets)
 - **Azure** — Resource Group + Static Website (Storage Account) + Key Vault (RBAC)
 - **Agentic patterns** — safe-outputs, minimal permissions, SHA-pinned actions, job-level OIDC
-
-## What it is not
-
-- ❌ A production-ready platform  
-- ❌ A Microsoft or GitHub endorsed solution  
-- ❌ A replacement for security review before enterprise deployment  
 
 ---
 
@@ -116,8 +109,6 @@ export REPO="${GITHUB_OWNER}/${GITHUB_REPO}"
 bash cleanup-lab.sh
 ```
 
----
-
 ## Repo structure
 
 ```
@@ -131,6 +122,14 @@ bash cleanup-lab.sh
 │   └── _reusable-destroy-azure-tf.yml# Reusable: TF destroy with OIDC
 ├── infra/envs/dev/
 │   ├── main.tf                       # RG + Storage Website + Key Vault
+│   ├── variables.tf
+│   └── outputs.tf
+├── infra/envs/test/
+│   ├── main.tf                       # Same resources, test defaults
+│   ├── variables.tf
+│   └── outputs.tf
+├── infra/envs/prod/
+│   ├── main.tf                       # Same resources, prod hardened (GRS, purge protection)
 │   ├── variables.tf
 │   └── outputs.tf
 ├── docs/

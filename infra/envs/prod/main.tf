@@ -15,7 +15,7 @@ terraform {
 provider "azurerm" {
   features {
     key_vault {
-      purge_soft_delete_on_destroy    = true
+      purge_soft_delete_on_destroy    = false
       recover_soft_deleted_key_vaults = true
     }
   }
@@ -36,14 +36,14 @@ resource "azurerm_resource_group" "rg" {
 }
 
 # ---------------------------------------------------------------------------
-# Storage Account — Static Website Hosting
+# Storage Account — Static Website Hosting (GRS for prod resilience)
 # ---------------------------------------------------------------------------
 resource "azurerm_storage_account" "web" {
   name                     = lower(substr(replace("st${var.project}${var.environment}web", "/[^a-z0-9]/", ""), 0, 24))
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_replication_type = "GRS"
   min_tls_version          = "TLS1_2"
   https_traffic_only_enabled = true
 
@@ -55,7 +55,6 @@ resource "azurerm_storage_account" "web" {
   tags = local.tags
 }
 
-# Upload a minimal demo index.html so the static website actually works
 resource "azurerm_storage_blob" "index" {
   name                   = "index.html"
   storage_account_name   = azurerm_storage_account.web.name
@@ -65,7 +64,7 @@ resource "azurerm_storage_blob" "index" {
   source_content = <<HTML
 <!DOCTYPE html>
 <html>
-<head><title>Agentic CI/CD Factory Template</title></head>
+<head><title>Agentic CI/CD — Production</title></head>
 <body>
   <h1>🚀 Agentic CI/CD Factory Template</h1>
   <p>Deployed to: <strong>${var.environment}</strong></p>
@@ -86,7 +85,7 @@ resource "azurerm_storage_blob" "error" {
 }
 
 # ---------------------------------------------------------------------------
-# Key Vault — RBAC-enabled, no secrets created
+# Key Vault — RBAC-enabled, purge protection ON for prod
 # ---------------------------------------------------------------------------
 resource "azurerm_key_vault" "kv" {
   name                        = lower(substr(replace("kv-${var.project}-${var.environment}", "/[^a-z0-9-]/", ""), 0, 24))
@@ -94,20 +93,18 @@ resource "azurerm_key_vault" "kv" {
   location                    = azurerm_resource_group.rg.location
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   sku_name                    = "standard"
-  enable_rbac_authorization   = true   # RBAC mode — no access policies
-  soft_delete_retention_days  = 7
-  purge_protection_enabled    = false  # dev/test: allow teardown without waiting for retention
+  enable_rbac_authorization   = true
+  soft_delete_retention_days  = 90
+  purge_protection_enabled    = true  # prod: prevent accidental permanent deletion
 
   network_acls {
-    default_action = "Allow"   # dev/test: open; restrict for production workloads
+    default_action = "Allow"
     bypass         = "AzureServices"
   }
 
   tags = local.tags
 }
 
-# Grant the CI/CD service principal Key Vault Secrets Officer so it can
-# manage secrets in future without needing access policy changes.
 resource "azurerm_role_assignment" "kv_sp" {
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"

@@ -17,9 +17,8 @@ We aim to acknowledge reports within 72 hours and resolve critical issues within
 
 ## Important Notice
 
-> ⚠️ This is an **educational template**. It is not production-hardened.
 > Review all RBAC assignments, replace placeholder values, and apply your
-> organisation's security policy before deploying to shared environments.
+> organisation's security policy before deploying to production.
 
 ## Security Defaults in This Template
 

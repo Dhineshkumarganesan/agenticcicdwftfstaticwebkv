@@ -209,7 +209,7 @@ gh workflow list
 
 ---
 
-## 8. Checkov scan fails on demo Terraform
+## 8. Checkov scan fails
 
 **Symptom:** CI fails on checkov security scan step.
 
@@ -218,12 +218,12 @@ gh workflow list
 **Fix:**
 ```bash
 # Run checkov locally to see findings
-checkov -d infra/envs/dev/ --quiet
+checkov -d infra/ --quiet
 
-# Common findings in demo infra:
-# - Storage account: enable HTTPS-only (already enabled in template)
-# - Key Vault: purge protection disabled (intentional for lab teardown)
-# - Resource group: no locks (intentional for easy cleanup)
+# Common findings:
+# - Storage account: enable HTTPS-only (already enabled)
+# - Key Vault: purge protection disabled (intentional for dev/test; prod has it enabled)
+# - Resource group: no locks (intentional for dev/test teardown)
 ```
 
 To suppress a specific finding, add a comment to the Terraform resource:

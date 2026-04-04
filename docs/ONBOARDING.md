@@ -205,7 +205,7 @@ Open the static website endpoint in your browser — you'll see the index.html.
 
 ## 8. Cleanup
 
-When done with the lab, destroy all Azure resources:
+When you need to destroy all Azure resources:
 
 ```bash
 export REPO="${GITHUB_OWNER}/${GITHUB_REPO}"
