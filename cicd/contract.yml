@@ -60,6 +60,7 @@ guardrails:
   allowed_registries:
     actions:
       - github.com/actions          # actions/checkout, setup-python, etc.
+      - github.com/azure            # azure/login
       - github.com/bridgecrewio    # checkov
       - github.com/github          # codeql-action
       - github.com/hashicorp       # setup-terraform
