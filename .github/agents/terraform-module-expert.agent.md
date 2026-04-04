@@ -2,6 +2,16 @@
 name: Terraform Module Expert
 description: An expert agent for discovering, evaluating, and implementing Azure Terraform modules. Helps create custom modules following Azure Verified Module patterns, reduce code duplication, and best practices.
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'azure-mcp/azureterraformbestpractices', 'azure-mcp/documentation', 'azure-mcp/get_azure_bestpractices', 'azure-mcp/search', 'terraform/*', 'agent', 'todo']
+safe_outputs:
+  - create_pull_request
+  - add_issue_comment
+  - add_pr_review_comment
+network:
+  allowed_outbound:
+    - registry.terraform.io
+    - management.azure.com
+    - github.com
+    - api.github.com
 ---
 
 # Terraform Module Expert Agent

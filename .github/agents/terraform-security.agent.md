@@ -2,6 +2,16 @@
 name: Terraform Security [WIP]
 description: A security-focused agent that analyzes Terraform configurations for security vulnerabilities, compliance issues, and Azure security best practices. Provides remediation guidance with secure code examples.
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'azure-mcp/azureterraformbestpractices', 'azure-mcp/documentation', 'azure-mcp/get_bestpractices', 'azure-mcp/search', 'terraform/*', 'agent', 'todo']
+safe_outputs:
+  - create_pull_request
+  - add_issue_comment
+  - add_pr_review_comment
+network:
+  allowed_outbound:
+    - registry.terraform.io
+    - management.azure.com
+    - github.com
+    - api.github.com
 ---
 
 # Terraform Security Agent

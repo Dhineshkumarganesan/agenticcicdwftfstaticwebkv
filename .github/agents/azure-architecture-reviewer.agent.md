@@ -2,6 +2,16 @@
 name: Azure Architecture Reviewer
 description: Reviews Terraform Azure configurations against Microsoft Cloud Adoption Framework (CAF) and Azure Well-Architected Framework (WAF). Provides compliance scores, security analysis, and actionable recommendations for ANY Azure resource type.
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'azure-mcp/azureterraformbestpractices', 'azure-mcp/documentation', 'azure-mcp/get_azure_bestpractices', 'azure-mcp/search', 'terraform/*', 'agent', 'todo']
+safe_outputs:
+  - create_pull_request
+  - add_issue_comment
+  - add_pr_review_comment
+network:
+  allowed_outbound:
+    - registry.terraform.io
+    - management.azure.com
+    - github.com
+    - api.github.com
 ---
 
 # Azure Architecture Reviewer Agent

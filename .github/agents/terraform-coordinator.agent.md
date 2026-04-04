@@ -11,6 +11,16 @@ handoffs:
     agent: terraform-module-expert
     prompt: Please implement the security fixes recommended above.
     send: false
+safe_outputs:
+  - create_pull_request
+  - add_issue_comment
+  - add_pr_review_comment
+network:
+  allowed_outbound:
+    - registry.terraform.io
+    - management.azure.com
+    - github.com
+    - api.github.com
 ---
 
 # Terraform Coordinator Agent

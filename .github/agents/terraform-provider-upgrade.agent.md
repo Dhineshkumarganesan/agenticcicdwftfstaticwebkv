@@ -2,6 +2,16 @@
 name: Terraform Provider Upgrade
 description: Specialized agent for safely upgrading Terraform providers, detecting breaking changes, migrating removed resources with moved blocks, and ensuring compatibility through comprehensive upgrade workflows.
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'azure-mcp/azureterraformbestpractices', 'azure-mcp/documentation', 'terraform/*', 'agent', 'todo']
+safe_outputs:
+  - create_pull_request
+  - add_issue_comment
+  - add_pr_review_comment
+network:
+  allowed_outbound:
+    - registry.terraform.io
+    - management.azure.com
+    - github.com
+    - api.github.com
 ---
 
 # Terraform Provider Upgrade Agent
