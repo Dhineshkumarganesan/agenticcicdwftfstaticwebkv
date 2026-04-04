@@ -21,9 +21,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Minimum workflow-level permissions. security-events:write is scoped to iac-scan job only.
+# Minimum workflow-level permissions.
+# id-token:write is required here because the terraform-ci jobs call a
+# reusable workflow (_reusable-tf-ci.yml) that requests an OIDC token.
+# GitHub requires the calling workflow to grant id-token:write for the
+# callee's OIDC request to succeed.
+# security-events:write is scoped only to the iac-scan job (least-privilege).
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -136,6 +142,7 @@ jobs:
     with:
       infra_path: infra/envs/dev
       tf_state_key: agenticcicdwftfstaticwebkv/dev.terraform.tfstate
+    secrets: inherit
 
   terraform-ci-test:
     name: Terraform CI — test
@@ -143,6 +150,7 @@ jobs:
     with:
       infra_path: infra/envs/test
       tf_state_key: agenticcicdwftfstaticwebkv/test.terraform.tfstate
+    secrets: inherit
 
   terraform-ci-prod:
     name: Terraform CI — prod
@@ -150,3 +158,4 @@ jobs:
     with:
       infra_path: infra/envs/prod
       tf_state_key: agenticcicdwftfstaticwebkv/prod.terraform.tfstate
+    secrets: inherit
