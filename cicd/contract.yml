@@ -8,15 +8,27 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 workload:
-  name: YOUR-PROJECT-NAME
-  owner: YOUR-GITHUB-OWNER
-  repo: YOUR-GITHUB-REPO
+  name: agenticcicdwftfstaticwebkv
+  owner: dhineshkumarganesan
+  repo: agenticcicdwftfstaticwebkv
   cloud: azure
-  region: YOUR-AZURE-REGION        # e.g. eastus
+  region: westeurope
   environments:
     - dev
     - test
     - prod
+
+# ── Resource intent (read by @terraform-module-expert to scaffold Terraform) ─
+resources:
+  - type: storage_account
+    purpose: static_website_hosting
+    replication: LRS
+    environments: [dev, test, prod]
+    region: westeurope
+    settings:
+      https_only: true
+      min_tls_version: TLS1_2
+      static_website: true
 
 # ── Deployment intent ────────────────────────────────────────────────────────
 pipeline:
