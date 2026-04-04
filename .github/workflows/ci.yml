@@ -25,7 +25,7 @@ concurrency:
 # id-token:write required because the reusable TF-CI workflow requests an OIDC token.
 permissions:
   contents: read
-  id-token: write
+  security-events: write
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -138,7 +138,6 @@ jobs:
     with:
       infra_path: infra/envs/dev
       tf_state_key: agenticcicdwftfstaticwebkv/dev.terraform.tfstate
-    secrets: inherit
 
   terraform-ci-test:
     name: Terraform CI — test
@@ -146,7 +145,6 @@ jobs:
     with:
       infra_path: infra/envs/test
       tf_state_key: agenticcicdwftfstaticwebkv/test.terraform.tfstate
-    secrets: inherit
 
   terraform-ci-prod:
     name: Terraform CI — prod
@@ -154,4 +152,3 @@ jobs:
     with:
       infra_path: infra/envs/prod
       tf_state_key: agenticcicdwftfstaticwebkv/prod.terraform.tfstate
-    secrets: inherit
