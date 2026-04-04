@@ -134,5 +134,5 @@ jobs:
     uses: ./.github/workflows/_reusable-tf-ci.yml
     with:
       infra_path: infra/envs/dev
-      tf_state_key: agentic-cicd-factory-template/dev.terraform.tfstate
+      tf_state_key: agenticcicdwftfstaticwebkv/dev.terraform.tfstate
     secrets: inherit

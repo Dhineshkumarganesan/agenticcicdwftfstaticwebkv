@@ -45,7 +45,7 @@ jobs:
     with:
       environment: dev
       infra_path:  infra/envs/dev
-      tf_state_key: agentic-cicd-factory-template/dev.terraform.tfstate
+      tf_state_key: agenticcicdwftfstaticwebkv/dev.terraform.tfstate
     secrets: inherit
 
   destroy-test:
@@ -61,7 +61,7 @@ jobs:
     with:
       environment: test
       infra_path:  infra/envs/dev
-      tf_state_key: agentic-cicd-factory-template/test.terraform.tfstate
+      tf_state_key: agenticcicdwftfstaticwebkv/test.terraform.tfstate
     secrets: inherit
 
   destroy-prod:
@@ -77,5 +77,5 @@ jobs:
     with:
       environment: prod
       infra_path:  infra/envs/dev
-      tf_state_key: agentic-cicd-factory-template/prod.terraform.tfstate
+      tf_state_key: agenticcicdwftfstaticwebkv/prod.terraform.tfstate
     secrets: inherit
