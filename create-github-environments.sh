@@ -1,13 +1,4 @@
 #!/usr/bin/env bash
-# create-github-environments.sh
-# Creates dev / test / prod GitHub Environments.
-# prod defaults to the repo owner as required reviewer.
-#
-# Required env vars:
-#   REPO  (format: owner/repo)
-# Optional:
-#   PROD_REVIEWERS_USERS  (comma-separated GitHub usernames)
-
 set -euo pipefail
 
 : "${REPO:?Set REPO=owner/repo}"
@@ -21,9 +12,9 @@ _create_env() {
 _set_prod_reviewers() {
   local reviewers_json="[]"
   if [[ -z "$PROD_REVIEWERS_USERS" ]]; then
-    # Default to repo owner
     PROD_REVIEWERS_USERS="${REPO%%/*}"
   fi
+
   IFS=',' read -ra users <<< "$PROD_REVIEWERS_USERS"
   for u in "${users[@]}"; do
     u="$(echo "$u" | xargs)"
@@ -32,10 +23,14 @@ _set_prod_reviewers() {
     uid="$(gh api "users/${u}" --jq '.id')"
     reviewers_json="$(jq -c --argjson id "$uid" '. + [{"type":"User","reviewer":{"id":$id}}]' <<<"$reviewers_json")"
   done
+
   if [[ "$(jq 'length' <<<"$reviewers_json")" -gt 0 ]]; then
     echo "▶ Setting prod reviewers: $PROD_REVIEWERS_USERS"
+    local payload
+    payload="$(jq -c --argjson reviewers "$reviewers_json" '{reviewers: $reviewers}')"
+
     gh api -X PUT "repos/${REPO}/environments/prod" \
-      --input - <<< "{\"reviewers\": $(echo "$reviewers_json")}" >/dev/null
+      --input <(printf '%s' "$payload") >/dev/null
   fi
 }
 
