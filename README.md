@@ -1,8 +1,8 @@
-# Agentic CI/CD Factory — Public Template
+# Agentic Reference (or Starter) CI/CD Factory — Public Template
 
-> This template implements enterprise CI/CD patterns with GitHub Actions + Terraform + Azure.
-> Review and customize Terraform variables, RBAC assignments, and naming conventions
-> for your organization before deploying.
+Implements recommended Azure and GitHub workflow patterns, progressive deployment, IaC, and OIDC integration. It provides a solid, production-usable foundation for teams or projects, ready for use in production environments with organization-aligned configuration
+
+> **Not affiliated with Microsoft or GitHub. No warranty.**
 
 ---
 
