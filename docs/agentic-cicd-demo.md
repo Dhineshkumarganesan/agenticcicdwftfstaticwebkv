@@ -1,6 +1,6 @@
 # Intent-Driven Agentic CI/CD: Building a CI/CD Factory that Understands What You Want to Deploy
 
-> **Series:** Engineering Platforms for the Agentic AI Era  
+> **Series:** [Engineering Platforms for the Agentic AI Era ](https://dhineshkumarganesan.github.io/) 
 > The full loop: declare intent → agent scaffolds → CI validates → CD deploys
 
 ---
