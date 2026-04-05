@@ -1,315 +1,98 @@
-# Onboarding Guide
+# Consumer Onboarding Guide (Using the Agentic CI/CD Factory)
 
-Detailed walkthrough for running the Agentic CI/CD Factory template end-to-end.
+This guide shows how an application repository onboards to the **Agentic CI/CD Factory**.
 
-> **Tip:** Read through this once before running anything.
-> The [README](../README.md) has the quick-start. This doc has the *why* behind each step.
-
----
-
-## Table of Contents
-
-1. [Prerequisites](#prerequisites)
-2. [Create your repo from template](#1-create-your-repo-from-template)
-3. [Clone and patch state keys](#2-clone-and-patch-tfstate-keys)
-4. [Set environment variables](#3-set-environment-variables)
-5. [Run onboarding](#4-run-onboarding-script)
-6. [What the onboarding script does](#what-the-onboarding-script-does)
-7. [Trigger CI](#5-trigger-ci)
-8. [Trigger CD (deploy)](#6-trigger-cd)
-9. [Verify the deployment](#7-verify-the-deployment)
-10. [Cleanup](#8-cleanup)
+> You do **not** write pipelines here.  
+> You only declare deployment intent in `contract.yml` and run the onboarding script.  
 
 ---
 
-## Prerequisites
+## Step 1 — Create your app repository from the Factory template
 
-Before starting, ensure all tools are installed and you are authenticated:
+Use the **Agentic CI/CD Factory Template** as your starting point:
 
 ```bash
-# Check versions
-az version
-gh --version
-jq --version
-terraform version
-
-# Install github copilot cli
- curl -fsSL https://gh.io/copilot-install | bash
-
-# Login
-az login
-az account set --subscription "$SUBSCRIPTION_ID"
-gh auth login
-```
-
-**Azure permissions you need:**
-- `Owner` or `Contributor + User Access Administrator` on the subscription
-- Ability to create Entra App Registrations (Application Administrator or equivalent)
-
-**GitHub permissions you need:**
-- Repository admin (to set secrets, environments, branch protection)
-
----
-
-## 1. Create your repo from template
-
-Using the GitHub web UI:
-1. Go to https://github.com/dhineshkumarganesan/agentic-cicd-factory-template
-2. Click **Use this template → Create a new repository**
-3. Name your repo, choose public/private, click **Create**
-
-Or via CLI:
-```bash
-gh repo create my-project \
+gh repo create my-app \
   --template dhineshkumarganesan/agentic-cicd-factory-template \
   --public
+gh repo clone my-app
+cd my-app
 ```
-
-Clone it locally:
-```bash
-gh repo clone my-project
-cd my-project
-```
-
 ---
 
-## 2. Clone and patch tfstate keys
+2. **Edit `cicd/contract.yml`**  
+   Declare your deployment intent (resources, environments, regions).
 
-The workflow files reference `agentic-cicd-factory-template/` as the Terraform state key prefix.
-You need to replace this with your own repo name so state files don't collide.
+   Describe what you want to deploy. This is your intent declaration.
 
-```bash
-export STATE_PREFIX="my-project"    # use your actual repo name
-export DRY_RUN=true                 # preview first
-bash patch-tfstate-keys.sh
+   Example:
+   
+   resource: static-website
+   environment: dev-test-prod
+   region: westeurope
+   
+   This is the only place you declare intent. The Factory interprets this into CI/CD workflows automatically.
 
-# If the diff looks correct:
-export DRY_RUN=false
-bash patch-tfstate-keys.sh
+4. **Set environment variables**  
+   Configure Azure subscription, tenant, TF state, GitHub owner/repo, etc.
 
-# Commit
-git add .github/workflows/
-git commit -m "chore: patch tfstate keys for my-project"
-```
+   export SUBSCRIPTION_ID="<your-azure-subscription-id>"
+   export TENANT_ID="<your-azure-tenant-id>"
+   export LOCATION="westeurope"
+   
+   export GITHUB_OWNER="<your-github-username-or-org>"
+   export GITHUB_REPO="my-app"
+   
+   export TFSTATE_RESOURCE_GROUP="rg-tfstate-my-app"
+   export TFSTATE_STORAGE_ACCOUNT="sttfstatemyapp"   # must be globally unique
+   export TFSTATE_CONTAINER="tfstate"
+   
+   # Optional: override GitHub users who approve prod deployments
+   # export PROD_REVIEWERS_USERS="alice,bob"
 
-**What changes:** Lines like `tf_state_key: "agentic-cicd-factory-template/dev.terraform.tfstate"` become `tf_state_key: "my-project/dev.terraform.tfstate"`.
+6. **Run the onboarding script**  
+   Executes OIDC setup, TF backend, GitHub secrets, environments, and branch protection.
 
----
+   bash setup/onboard-agenticcicd-newrepo.sh
 
-## 3. Set environment variables
+8. **Trigger CI**  
+   Push any change or run manually: `gh workflow run ci.yml`.
+    gh workflow run ci.yml
+    gh run watch
 
-Export all required variables before running the onboarding script:
+10. **Trigger CD (deploy)**  
+   Deploy dev → test → prod: `gh workflow run cd.yml -f environment=all`.
+     gh workflow run cd.yml -f environment=all
+     gh run watch
 
-```bash
-# Azure identifiers
-export SUBSCRIPTION_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export LOCATION="eastus"                    # any valid Azure region
 
-# GitHub identifiers
-export GITHUB_OWNER="your-github-username"  # or org name
-export GITHUB_REPO="my-project"             # just the repo name, no owner prefix
+11. **Verify and Cleanup**  
+   Check deployment outputs (website/key vault) and optionally destroy resources when done.
 
-# Terraform state backend
-export TFSTATE_RESOURCE_GROUP="rg-tfstate-my-project"
-export TFSTATE_STORAGE_ACCOUNT="sttfstatemyproject"  # 3-24 lowercase chars, globally unique
-export TFSTATE_CONTAINER="tfstate"
+    gh run view --log | grep -E "website_endpoint|key_vault"
 
-# Optional: override which GitHub users approve prod deployments
-# export PROD_REVIEWERS_USERS="alice,bob"   # defaults to repo owner
-```
+    az storage account show \
+    -n "<your-storage-account-name>" \
+    -g "<your-resource-group-name>" \
+    --query "primaryEndpoints.web" -o tsv
 
-**Finding your IDs:**
-```bash
-# Subscription ID
-az account show --query id -o tsv
+    Cleanup (optional)
 
-# Tenant ID
-az account show --query tenantId -o tsv
-```
+    Destroy all resources:
 
----
+    export RUN_DESTROY_WORKFLOW=true
+    bash setup/cleanup-lab.sh
 
-## 4. Run onboarding script
+    Optionally remove the Entra App Registration:
+    APP_ID=$(az ad app list --display-name "${GITHUB_REPO}-oidc" --query "[0].appId" -o tsv)
+    az ad app delete --id "$APP_ID"
 
-```bash
-bash setup/onboard-agenticcicd-newrepo.sh
-```
+##  Security Notes
 
-This takes about 2–3 minutes. See the next section for what it does.
+OIDC only — no long-lived secrets stored in GitHub
+Workflow contents: read; id-token: write per deploy job only
+GitHub Actions pinned to full commit SHAs
+Terraform state in Azure Storage with blob-level locking
+KV RBAC enabled — no vault access policy
 
----
-
-## What the onboarding script does
-
-| Step | What happens |
-|------|-------------|
-| 1. OIDC bootstrap | Creates one Entra App Registration (`${GITHUB_REPO}-oidc`) with 5 federated identity credentials — one for each GitHub Actions context: PR, main push, dev env, test env, prod env |
-| 2. Resolve Client ID | Looks up the newly created app by name; fails if not exactly 1 match (prevents ambiguity) |
-| 3. TF backend | Creates the Resource Group and Storage Account for Terraform remote state; assigns `Storage Blob Data Contributor` to the service principal |
-| 4. GitHub secrets | Sets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` as encrypted repo secrets |
-| 5. GitHub variables | Sets `TFSTATE_RESOURCE_GROUP`, `TFSTATE_STORAGE_ACCOUNT`, `TFSTATE_CONTAINER` as repo variables |
-| 6. Environments | Creates `dev`, `test`, `prod` GitHub Environments; prod requires reviewer approval |
-| 7. Branch protection | Requires PR + all CI checks on `main`; enforces for admins too |
-
-## NOTE
-
-If this script bash setup/onboard-agenticcicd-newrepo.sh not works, then try this sequence of set up steps
-
-
- 
- ```bash
-Step 1 — Create Entra App + OIDC Federated Credentials
-
- export SUBSCRIPTION_ID="<your-subsciption-id>"  # PLEASE EDIT THIS
- export TENANT_ID="<your-azure-tenant-id>"    # PLEASE EDIT THIS
- export GITHUB_OWNER="<your-github-account-name>"   # ⚠️ EXACT case — critical for OIDC
- export GITHUB_REPO="<your-repo-name>"
- 
- bash setup/azure-oidc-bootstrap-one-sp.sh
-
-Output: prints AZURE_CLIENT_ID=... — copy this value, you need it for Steps 2 & 3.
-
---------------------------------------------------------------------------------------
-
-Step 2 — Create Terraform State Backend
-
- export SUBSCRIPTION_ID="<your-subsciption-id>"   # PLEASE EDIT THIS
- export LOCATION="westeurope"
- export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd"   # PLEASE EDIT THIS
- export TFSTATE_STORAGE_ACCOUNT="sttfstateacicd12345"   # globally unique, lowercase 
-only
- export TFSTATE_CONTAINER="tfstate"
- export AZURE_CLIENT_ID="<value from Step 1>"           # needed for RBAC assignment  # PLEASE EDIT THIS
- 
- bash setup/terraform-backend-bootstrap.sh
-
---------------------------------------------------------------------------------------
-
-Step 3 — Set GitHub Secrets & Variables
-
- export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
- export AZURE_CLIENT_ID="<value from Step 1>"  # PLEASE EDIT THIS
- export AZURE_TENANT_ID="<your-azure-tenant-id>"  # PLEASE EDIT THIS
- export AZURE_SUBSCRIPTION_ID="<your-subsciption-id>"  # PLEASE EDIT THIS
- export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd" 
- export TFSTATE_STORAGE_ACCOUNT="sttfstateacicd12345"
- export TFSTATE_CONTAINER="tfstate"
- 
- bash setup/github-secrets-bootstrap.sh
-
---------------------------------------------------------------------------------------
-
-Step 4 — Create GitHub Environments (dev / test / prod)
-
- export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
- export PROD_REVIEWERS_USERS="<your-github-account/user-name>"   # GitHub username for prod 
-approval gate
- 
- bash setup/create-github-environments.sh
-
---------------------------------------------------------------------------------------
-
-Step 5 — Apply Branch Protection on main
-
- export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
- 
- bash setup/branch-protection-main.sh
-
---------------------------------------------------------------------------------------
-
-⚠️ If OIDC breaks later (repair only, not initial setup)
-
- export AZURE_CLIENT_ID="<value from Step 1>"  # PLEASE EDIT THIS
- bash setup/fix-oidc-subjects.sh
- # Wait 2 minutes before re-running CI
-
---------------------------------------------------------------------------------------
-
-Teardown (end of lab)
-
- export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
- export SUBSCRIPTION_ID="<your-subsciption-id>"  # PLEASE EDIT THIS
- export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd"
- export RUN_DESTROY_WORKFLOW="true"
- export ENVIRONMENT="all"
- 
- bash setup/cleanup-lab.sh
-```
-
----
-
-## 5. Trigger CI
-
-Push any change to trigger CI, or trigger manually:
-
-```bash
-# Manual dispatch
-gh workflow run ci.yml
-
-# Watch
-gh run watch
-```
-
-CI runs: IaC security scan (checkov) → Terraform fmt/validate/plan (all 3 environments).
-
----
-
-## 6. Trigger CD
-
-CD deploys dev → test → prod in sequence. Prod requires a manual approval from the configured reviewer.
-
-```bash
-# Deploy dev only
-gh workflow run cd.yml -f environment=dev
-
-# Deploy all (dev → test → prod)
-gh workflow run cd.yml -f environment=all
-
-# Watch progress
-gh run watch
-```
-
----
-
-## 7. Verify the deployment
-
-After CD succeeds, retrieve the outputs:
-
-```bash
-# From Terraform outputs (via workflow logs)
-gh run view --log | grep -E "website_endpoint|key_vault"
-
-# Or directly from Azure
-az storage account show \
-  -n "your-storage-account-name" \
-  -g "your-resource-group-name" \
-  --query "primaryEndpoints.web" -o tsv
-```
-
-Open the static website endpoint in your browser — you'll see the index.html.
-
----
-
-## 8. Cleanup
-
-When done with the lab, destroy all Azure resources:
-
-```bash
-export REPO="${GITHUB_OWNER}/${GITHUB_REPO}"
-export SUBSCRIPTION_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export TFSTATE_RESOURCE_GROUP="rg-tfstate-my-project"
-
-# Option A: just delete the state RG (fastest)
-bash cleanup-lab.sh
-
-# Option B: trigger GitHub Actions destroy workflow first, then delete state RG
-export RUN_DESTROY_WORKFLOW=true
-bash cleanup-lab.sh
-```
-
-After cleanup, optionally remove the Entra App Registration:
-```bash
-APP_ID=$(az ad app list --display-name "${GITHUB_REPO}-oidc" --query "[0].appId" -o tsv)
-az ad app delete --id "$APP_ID"
-```
+⚠️ This is a reference template. Review all RBAC assignments and replace placeholders before production use.
