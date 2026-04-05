@@ -7,6 +7,26 @@ using GitHub Actions, Infrastructure-as-Code (IaC), and OIDC integration. This r
 serves as a hands-on example for teams, showing how to adopt the factory for production
 workloads with organization-aligned configuration. Demonstrates how a real project declares intent and consumes the factory.
 
+
+## 📜 Intent Declaration via contract.yml
+
+This repository does not contain CI/CD pipeline logic.
+
+Instead, it declares *deployment intent* using a `contract.yml` file.
+
+This contract is interpreted by the **Agentic CI/CD Factory**, which:
+
+- Understands what needs to be deployed
+- Selects the appropriate Terraform modules
+- Generates the required CI/CD workflows
+- Applies governance and validation automatically
+
+There are **no pipelines to write** in this repository.
+
+You only describe *what* you want to deploy.  
+The Factory decides *how* to deploy it.
+
+This demonstrates the power of **intent-driven CI/CD**.
 > **Not affiliated with Microsoft or GitHub. No warranty.**
 
 ---
