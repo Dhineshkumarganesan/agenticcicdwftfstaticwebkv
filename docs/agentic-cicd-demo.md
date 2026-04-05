@@ -205,10 +205,15 @@ Each CD job:
 
 > **📸 Screenshot:** GitHub Actions CD run — all 3 deploy jobs green (dev → test → prod in sequence)
 
+<img width="1875" height="792" alt="image" src="https://github.com/user-attachments/assets/fd88307c-a4fb-4735-8e8e-535b2397a184" />
+
 > **📸 Screenshot:** Azure Portal — Resource Groups `rg-agfactory-dev`, `rg-agfactory-test`, `rg-agfactory-prod` created
+
+<img width="1910" height="632" alt="image" src="https://github.com/user-attachments/assets/2f95a935-5133-422e-9437-33a7c7a566fd" />
 
 > **📸 Screenshot:** Azure Portal — Storage Account `stagfactorydev` with Static website enabled
 
+<img width="1908" height="598" alt="image" src="https://github.com/user-attachments/assets/45532e32-e492-420a-b42d-fea36ba053fc" />
 ---
 
 ## Step 5 — Destroy (Manual Gate)
@@ -233,9 +238,18 @@ To destroy all three environments:
 
 > **📸 Screenshot:** GitHub Actions Destroy workflow dispatch inputs (environment=all, confirm=DESTROY)
 
+<img width="1088" height="510" alt="image" src="https://github.com/user-attachments/assets/e0e66f29-4549-4f8f-b97e-717614212844" />
+
+<img width="1883" height="861" alt="image" src="https://github.com/user-attachments/assets/a465ce1d-f12a-476d-9643-a9dfa8ff4c68" />
+
+
 > **📸 Screenshot:** Destroy run — all 4 jobs green
+>
+> <img width="1879" height="787" alt="image" src="https://github.com/user-attachments/assets/b2aaab4c-decc-4478-a6c5-f07214772018" />
 
 > **📸 Screenshot:** Azure Portal — Resource Groups deleted / no longer present
+
+<img width="1896" height="592" alt="image" src="https://github.com/user-attachments/assets/d7aac7af-e1e2-4e60-9c65-69b540c2d150" />
 
 ---
 
