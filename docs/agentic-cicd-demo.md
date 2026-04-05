@@ -118,6 +118,12 @@ The agent read `contract.yml`, checked existing skeleton files, and scaffolded a
 
 > **📸 Screenshot:** VS Code file explorer showing `infra/envs/dev/main.tf` with scaffolded resources
 
+<img width="1127" height="742" alt="image" src="https://github.com/user-attachments/assets/c557e768-4200-452d-9f17-774249970755" />
+
+<img width="1052" height="814" alt="image" src="https://github.com/user-attachments/assets/1610de37-2208-4440-af68-0e14d3d61827" />
+
+<img width="1077" height="541" alt="image" src="https://github.com/user-attachments/assets/54f398ce-f6b9-49c4-969a-503565721685" />
+
 ---
 
 ## Step 3 — CI Pipeline Validates All Three Environments
@@ -142,7 +148,12 @@ Each Terraform CI job:
 
 > **📸 Screenshot:** GitHub Actions CI run — all 6 jobs green
 
+<img width="1814" height="887" alt="image" src="https://github.com/user-attachments/assets/37efb696-fd2e-4eeb-b2fe-1d0fe91d5fe8" />
+
+
 > **📸 Screenshot:** Terraform plan output for dev showing `+azurerm_resource_group.main` and `+azurerm_storage_account.web`
+<img width="1862" height="961" alt="image" src="https://github.com/user-attachments/assets/d7f914f2-ef9f-4a95-b001-9c184cbbcfe6" />
+
 
 ### Contract Lint — Runtime Guardrails
 
