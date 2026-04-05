@@ -1,6 +1,11 @@
-# Agentic Reference (or Starter) CI/CD Factory — Public Template
+# Agentic Reference (or Starter) CI/CD Consumer
 
-Implements recommended Azure and GitHub workflow patterns, progressive deployment, IaC, and OIDC integration. It provides a solid, production-usable foundation for teams or projects, ready for use in production environments with organization-aligned configuration
+This repository contains a sample application (e.g., a static website, API, or
+microservice) that is deployed using the Reference CI/CD Factory. It demonstrates how
+to onboard a real project, configure CI/CD, and manage progressive deployments to Azure
+using GitHub Actions, Infrastructure-as-Code (IaC), and OIDC integration. This repo
+serves as a hands-on example for teams, showing how to adopt the factory for production
+workloads with organization-aligned configuration
 
 > **Not affiliated with Microsoft or GitHub. No warranty.**
 
