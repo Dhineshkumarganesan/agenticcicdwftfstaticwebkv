@@ -59,7 +59,7 @@ jobs:
     uses: ./.github/workflows/_reusable-destroy-azure-tf.yml
     with:
       environment: test
-      infra_path:  infra/envs/dev  # lab: all envs share dev config; change to infra/envs/test / prod for separate per-env configs
+      infra_path:  infra/envs/test
       tf_state_key: agenticcicdwftfstaticwebkv/test.terraform.tfstate
     secrets: inherit
 
@@ -75,6 +75,6 @@ jobs:
     uses: ./.github/workflows/_reusable-destroy-azure-tf.yml
     with:
       environment: prod
-      infra_path:  infra/envs/dev  # lab: all envs share dev config; change to infra/envs/test / prod for separate per-env configs
+      infra_path:  infra/envs/prod
       tf_state_key: agenticcicdwftfstaticwebkv/prod.terraform.tfstate
     secrets: inherit
