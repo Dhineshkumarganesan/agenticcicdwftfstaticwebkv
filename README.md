@@ -1,5 +1,15 @@
 # Agentic CI/CD Consumer Reference Implementation
 
+> **Audience:** Platform engineers, cloud architects, and DevOps teams building an Intent-Driven Agentic CI/CD platform.  
+> **Status:** Reference implementation of an Agentic CI/CD Factory pattern.
+
+## 📌 Quick Links
+
+- 🔹 [What this repository does](#what-this-repository-does)
+- 🔹 [How to onboard a consumer repository](#how-to-onboard-a-consumer-repository)
+- 🔹 [How intent is interpreted from contract.yml](#intent-driven-agentic-cicd-factory)
+- 🔹 [Documentation & troubleshooting](#documentation)
+
 This repository contains a sample application (e.g., a static website, API, or
 microservice) that is deployed using the Reference CI/CD Factory. It demonstrates how
 to onboard a real project, configure CI/CD, and manage progressive deployments to Azure
