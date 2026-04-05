@@ -20,10 +20,10 @@ cd my-app
 ```
 ---
 
-2. **Edit `cicd/contract.yml`**  
-   Declare your deployment intent (resources, environments, regions).
-
-   Describe what you want to deploy. This is your intent declaration.
+2. **Edit `cicd/contract.yml`**
+   
+Declare your deployment intent (resources, environments, regions).
+This is the only place you declare intent — the Factory will interpret it into CI/CD workflows automatically.
 
    Example:
    
@@ -36,19 +36,19 @@ cd my-app
 4. **Set environment variables**  
    Configure Azure subscription, tenant, TF state, GitHub owner/repo, etc.
 
-   export SUBSCRIPTION_ID="<your-azure-subscription-id>"
-   export TENANT_ID="<your-azure-tenant-id>"
-   export LOCATION="westeurope"
-   
-   export GITHUB_OWNER="<your-github-username-or-org>"
-   export GITHUB_REPO="my-app"
-   
-   export TFSTATE_RESOURCE_GROUP="rg-tfstate-my-app"
-   export TFSTATE_STORAGE_ACCOUNT="sttfstatemyapp"   # must be globally unique
-   export TFSTATE_CONTAINER="tfstate"
-   
-   # Optional: override GitHub users who approve prod deployments
-   # export PROD_REVIEWERS_USERS="alice,bob"
+  export SUBSCRIPTION_ID=""
+  export TENANT_ID=""
+  export LOCATION="westeurope"
+  
+  export GITHUB_OWNER=""
+  export GITHUB_REPO="my-app"
+  
+  export TFSTATE_RESOURCE_GROUP="rg-tfstate-my-app"
+  export TFSTATE_STORAGE_ACCOUNT="sttfstatemyapp"   # must be globally unique
+  export TFSTATE_CONTAINER="tfstate"
+  
+  # Optional: override GitHub users who approve prod deployments
+  export PROD_REVIEWERS_USERS="alice,bob"
 
 6. **Run the onboarding script**  
    Executes OIDC setup, TF backend, GitHub secrets, environments, and branch protection.
@@ -60,14 +60,22 @@ cd my-app
     gh workflow run ci.yml
     gh run watch
 
-10. **Trigger CD (deploy)**  
+   CI includes: IaC security scan, Terraform fmt/validate/plan (all environments).
+
+10. **Trigger CD (deploy)**
+
+   Deploy environments in sequence (dev → test → prod):
+   
    Deploy dev → test → prod: `gh workflow run cd.yml -f environment=all`.
      gh workflow run cd.yml -f environment=all
      gh run watch
 
+  Prod requires manual approval from configured reviewers.
 
-11. **Verify and Cleanup**  
-   Check deployment outputs (website/key vault) and optionally destroy resources when done.
+
+12. **Verify and Cleanup**  
+
+  Verify deployment:
 
     gh run view --log | grep -E "website_endpoint|key_vault"
 
@@ -76,14 +84,13 @@ cd my-app
     -g "<your-resource-group-name>" \
     --query "primaryEndpoints.web" -o tsv
 
-    Cleanup (optional)
-
-    Destroy all resources:
+   Cleanup resources (optional):
 
     export RUN_DESTROY_WORKFLOW=true
     bash setup/cleanup-lab.sh
 
-    Optionally remove the Entra App Registration:
+  Optionally remove the Entra App Registration:
+  
     APP_ID=$(az ad app list --display-name "${GITHUB_REPO}-oidc" --query "[0].appId" -o tsv)
     az ad app delete --id "$APP_ID"
 
