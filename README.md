@@ -1,44 +1,51 @@
 # Agentic CI/CD Consumer Reference Implementation
 
-> **Audience:** Platform engineers, cloud architects, and DevOps teams building an Intent-Driven Agentic CI/CD platform.  
-> **Status:** Reference implementation of an Agentic CI/CD Factory pattern.
+> **Audience:** Application teams and engineers who want to deploy cloud resources without writing CI/CD pipelines.  
+> **Status:** Reference consumer repository demonstrating intent-driven deployment using a contract.
+
+---
+
+## 🚀 What this repository is
+
+This repository contains **no CI/CD pipeline logic**.
+
+Instead, it declares **deployment intent** using a single file: `contract.yml`.
+
+That intent is interpreted by the **Agentic CI/CD Factory**, which decides:
+
+- What needs to be deployed
+- Which Terraform modules to use
+- Which workflows must run
+- What governance and validations to apply
+
+> 👉 You describe *what* you want to deploy.  
+> 👉 The factory decides *how* it is deployed.
+
+This repository demonstrates what a real project looks like when CI/CD is **intent-driven, not pipeline-driven**.
+
+---
 
 ## 📌 Quick Links
 
-- 🔹 [What this repository does](#what-this-repository-does)
-- 🔹 [How to onboard a consumer repository](#how-to-onboard-a-consumer-repository)
-- 🔹 [How intent is interpreted from contract.yml](#intent-driven-agentic-cicd-factory)
-- 🔹 [Documentation & troubleshooting](#documentation)
+- What this repository does
+- How to declare deployment intent using `contract.yml`
+- How onboarding to the Factory works
+- Documentation & troubleshooting
 
-This repository contains a sample application (e.g., a static website, API, or
-microservice) that is deployed using the Reference CI/CD Factory. It demonstrates how
-to onboard a real project, configure CI/CD, and manage progressive deployments to Azure
-using GitHub Actions, Infrastructure-as-Code (IaC), and OIDC integration. This repo
-serves as a hands-on example for teams, showing how to adopt the factory for production
-workloads with organization-aligned configuration. Demonstrates how a real project declares intent and consumes the factory.
-This repository demonstrates how CI/CD can be driven by **intent**, not pipelines.
+---
 
+## 📜 Intent Declaration via `contract.yml`
 
-## 📜 Intent Declaration via contract.yml
+There are no pipelines to write in this repository.
 
-This repository does not contain CI/CD pipeline logic.
+You only describe the infrastructure you want.  
+The factory interprets this contract and generates the required CI/CD behavior automatically.
 
-Instead, it declares *deployment intent* using a `contract.yml` file.
+This is the core idea behind **Agentic CI/CD**.
 
-This contract is interpreted by the **Agentic CI/CD Factory**, which:
+---
 
-- Understands what needs to be deployed
-- Selects the appropriate Terraform modules
-- Generates the required CI/CD workflows
-- Applies governance and validation automatically
-
-There are **no pipelines to write** in this repository.
-
-You only describe *what* you want to deploy.  
-The Factory decides *how* to deploy it.
-
-This demonstrates the power of **intent-driven CI/CD**.
-> **Not affiliated with Microsoft or GitHub. No warranty.**
+Not affiliated with Microsoft or GitHub. No warranty. MIT License.
 
 ---
 
