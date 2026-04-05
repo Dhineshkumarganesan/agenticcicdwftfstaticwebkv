@@ -6,7 +6,7 @@ Please do not report security vulnerabilities through public GitHub Issues.
 
 Use **Security → Advisories → Report a vulnerability** in this repository, or contact the maintainer via their GitHub profile.
 
-We aim to acknowledge reports within **72 hours** and resolve critical issues within **14 days**.
+Reports will be reviewed on a best-effort basis.
 
 ---
 
