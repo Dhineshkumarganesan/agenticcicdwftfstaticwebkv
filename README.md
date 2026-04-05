@@ -52,7 +52,7 @@ production-grade deployments.
 **GitHub permissions required:**
 - Repo admin (to set secrets, variables, branch protection, environments)
 - GitHub Free plan is sufficient
-
+ - GitHub Copilot CLI — Requires an active Copilot license (Get Copilot)
 ---
 
 ## Tomorrow Runbook (quick start)
