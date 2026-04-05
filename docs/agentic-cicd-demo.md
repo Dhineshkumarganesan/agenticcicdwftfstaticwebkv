@@ -304,6 +304,7 @@ The script auto-resolves the object ID from the client ID — no manual ID hunti
 When patching federated credentials, always derive the object ID from the **same `AZURE_CLIENT_ID`** used in the GitHub secret. Using an unrelated object ID silently patches the wrong app.
 
 > **📸 Screenshot:** Azure Portal — App Registration "agenticcicdwftfstaticwebkv-oidc" → Federated credentials tab showing all 5 credentials
+<img width="1218" height="460" alt="image" src="https://github.com/user-attachments/assets/ae56effd-bc4d-444f-9095-6208ff10a70d" />
 
 ---
 
