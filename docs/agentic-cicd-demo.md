@@ -238,10 +238,7 @@ To destroy all three environments:
 
 > **📸 Screenshot:** GitHub Actions Destroy workflow dispatch inputs (environment=all, confirm=DESTROY)
 
-<img width="1088" height="510" alt="image" src="https://github.com/user-attachments/assets/e0e66f29-4549-4f8f-b97e-717614212844" />
-
 <img width="1883" height="861" alt="image" src="https://github.com/user-attachments/assets/a465ce1d-f12a-476d-9643-a9dfa8ff4c68" />
-
 
 > **📸 Screenshot:** Destroy run — all 4 jobs green
 >
