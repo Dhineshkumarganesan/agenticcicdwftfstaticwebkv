@@ -120,7 +120,11 @@ The agent read `contract.yml`, checked existing skeleton files, and scaffolded a
 
 <img width="1127" height="742" alt="image" src="https://github.com/user-attachments/assets/c557e768-4200-452d-9f17-774249970755" />
 
+how main.tf file scaffolded
+
 <img width="1052" height="814" alt="image" src="https://github.com/user-attachments/assets/1610de37-2208-4440-af68-0e14d3d61827" />
+
+how output.tf file scaffolded
 
 <img width="1077" height="541" alt="image" src="https://github.com/user-attachments/assets/54f398ce-f6b9-49c4-969a-503565721685" />
 
@@ -165,6 +169,10 @@ The `Contract Lint` job runs `scripts/contract_lint.py` which validates every wo
 - All action orgs on the allowed-registries list
 
 > **📸 Screenshot:** Contract Lint job output — all guardrail checks passed ✓
+
+please take a closer look on the guardrail checks passed output
+
+<img width="1906" height="934" alt="image" src="https://github.com/user-attachments/assets/d411848d-4422-4e6e-853d-716c344a4365" />
 
 ---
 
