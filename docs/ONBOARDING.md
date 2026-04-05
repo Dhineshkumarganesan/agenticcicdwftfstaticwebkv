@@ -97,9 +97,13 @@ This is the only place you declare intent — the Factory will interpret it into
 ##  Security Notes
 
 OIDC only — no long-lived secrets stored in GitHub
+
 Workflow contents: read; id-token: write per deploy job only
+
 GitHub Actions pinned to full commit SHAs
+
 Terraform state in Azure Storage with blob-level locking
-KV RBAC enabled — no vault access policy
+
+Key Vault RBAC enabled — no vault access policy
 
 ⚠️ This is a reference template. Review all RBAC assignments and replace placeholders before production use.
