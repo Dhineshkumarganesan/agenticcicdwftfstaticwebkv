@@ -206,6 +206,12 @@ CI has passed. Please standardise tag keys to underscore
 convention across all envs (managed_by, source_repo) 
 and push to main to trigger CD.
 ```
+> **📸 Screenshot:** A second prompt triggered a real infrastructure change that kicked off CD ✓
+
+- Figure 9: Prompt to inform agent to continue to trigger the CD workflow
+  
+<img width="986" height="596" alt="image" src="https://github.com/user-attachments/assets/00427cfd-8820-4b59-a858-e950de896532" />
+
 
 The agent updated all 3 `main.tf` files and pushed — CD triggered automatically:
 
@@ -225,19 +231,19 @@ Each CD job:
 
 > **📸 Screenshot:** GitHub Actions CD run — all 3 deploy jobs green (dev → test → prod in sequence)
 
- - Figure 9: GitHub Actions CD run — progressive deploys to dev, test, and prod
+ - Figure 10: GitHub Actions CD run — progressive deploys to dev, test, and prod
 
 <img width="1875" height="792" alt="image" src="https://github.com/user-attachments/assets/fd88307c-a4fb-4735-8e8e-535b2397a184" />
 
 > **📸 Screenshot:** Azure Portal — Resource Groups `rg-agfactory-dev`, `rg-agfactory-test`, `rg-agfactory-prod` created
 
- - Figure 10: Azure Portal showing created Resource Groups for each environment
+ - Figure 11: Azure Portal showing created Resource Groups for each environment
    
 <img width="1910" height="632" alt="image" src="https://github.com/user-attachments/assets/2f95a935-5133-422e-9437-33a7c7a566fd" />
 
 > **📸 Screenshot:** Azure Portal — Storage Account `stagfactorydev` with Static website enabled
 
- - Figure 11: Azure Portal showing Storage Account with Static website enabled
+ - Figure 12: Azure Portal showing Storage Account with Static website enabled
 
 <img width="1908" height="598" alt="image" src="https://github.com/user-attachments/assets/45532e32-e492-420a-b42d-fea36ba053fc" />
 
@@ -265,19 +271,19 @@ To destroy all three environments:
 
 > **📸 Screenshot:** GitHub Actions Destroy workflow dispatch inputs (environment=all, confirm=DESTROY)
 
-- Figure 12: GitHub Actions Destroy workflow dispatch with DESTROY confirmation
+- Figure 13: GitHub Actions Destroy workflow dispatch with DESTROY confirmation
 
 <img width="1883" height="861" alt="image" src="https://github.com/user-attachments/assets/a465ce1d-f12a-476d-9643-a9dfa8ff4c68" />
 
 > **📸 Screenshot:** Destroy run — all 4 jobs green
 
-- Figure 13: Destroy workflow run — all jobs passing
+- Figure 14: Destroy workflow run — all jobs passing
 
 <img width="1879" height="787" alt="image" src="https://github.com/user-attachments/assets/b2aaab4c-decc-4478-a6c5-f07214772018" />
 
 > **📸 Screenshot:** Azure Portal — Resource Groups deleted / no longer present. We are left with only terraform state resource group which will be cleaned up at the end
 
-- Figure 14: Azure Portal after Resource Groups deletion (clean state)
+- Figure 15: Azure Portal after Resource Groups deletion (clean state)
 
 <img width="1896" height="592" alt="image" src="https://github.com/user-attachments/assets/d7aac7af-e1e2-4e60-9c65-69b540c2d150" />
 
@@ -338,7 +344,7 @@ When patching federated credentials, always derive the object ID from the **same
 
 > **📸 Screenshot:** Azure Portal — App Registration "agenticcicdwftfstaticwebkv-oidc" → Federated credentials tab showing all 5 credentials
 
-- Figure 15: Azure Portal — App Registration’s Federated credentials tab with all 5 credentials
+- Figure 16: Azure Portal — App Registration’s Federated credentials tab with all 5 credentials
 
 <img width="1218" height="460" alt="image" src="https://github.com/user-attachments/assets/ae56effd-bc4d-444f-9095-6208ff10a70d" />
 
@@ -369,7 +375,7 @@ git push to main
 
 > **📸 Screenshot:** GitHub Actions tab showing CI and CD runs side by side
 
- - Figure 16: GitHub Actions tab showing CI and CD workflow runs side by side
+ - Figure 17: GitHub Actions tab showing CI and CD workflow runs side by side
 
 <img width="1912" height="726" alt="image" src="https://github.com/user-attachments/assets/c9c8058f-4371-4372-9259-07a9a99e7588" />
 
