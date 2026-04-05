@@ -244,7 +244,7 @@ To destroy all three environments:
 >
 > <img width="1879" height="787" alt="image" src="https://github.com/user-attachments/assets/b2aaab4c-decc-4478-a6c5-f07214772018" />
 
-> **📸 Screenshot:** Azure Portal — Resource Groups deleted / no longer present
+> **📸 Screenshot:** Azure Portal — Resource Groups deleted / no longer present. We are left with only terraform state resource group which will be cleaned up at the end
 
 <img width="1896" height="592" alt="image" src="https://github.com/user-attachments/assets/d7aac7af-e1e2-4e60-9c65-69b540c2d150" />
 
