@@ -189,7 +189,7 @@ please take a closer look on the guardrail checks passed output
 
 ## Step 4 — CD Pipeline Deploys dev → test → prod
 
-A second prompt triggered a real infrastructure change that kicked off CD:
+A second prompt updated the standardised tag keys in the Terraform configuration. Because this change modified main.tf, committing and pushing it to the repository automatically triggered the CD workflow, deploying the updated infrastructure.
 
 ```
 @terraform-module-expert
