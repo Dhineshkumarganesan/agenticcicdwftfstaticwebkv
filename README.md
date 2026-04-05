@@ -25,15 +25,6 @@ This repository demonstrates what a real project looks like when CI/CD is **inte
 
 ---
 
-## 📌 Quick Links
-
-- What this repository does
-- How to declare deployment intent using `contract.yml`
-- How onboarding to the Factory works
-- Documentation & troubleshooting
-
----
-
 ## 📜 Intent Declaration via `contract.yml`
 
 There are no pipelines to write in this repository.
