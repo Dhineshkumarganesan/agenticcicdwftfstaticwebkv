@@ -115,10 +115,11 @@ The agent read `contract.yml`, checked existing skeleton files, and scaffolded a
 
 <img width="1116" height="776" alt="image" src="https://github.com/user-attachments/assets/e65a4b2c-9c31-4fc2-afd9-fdcc1e2689aa" />
 
-
-> **📸 Screenshot:** VS Code file explorer showing `infra/envs/dev/main.tf` with scaffolded resources
+Scaffold Summary
 
 <img width="1127" height="742" alt="image" src="https://github.com/user-attachments/assets/c557e768-4200-452d-9f17-774249970755" />
+
+> **📸 Screenshot:** VS Code file explorer showing `infra/envs/dev/main.tf` with scaffolded resources
 
 how main.tf file scaffolded
 
