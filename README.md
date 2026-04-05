@@ -16,14 +16,22 @@ workloads with organization-aligned configuration
 [![OIDC Auth](https://img.shields.io/badge/Auth-OIDC%20only-green)](docs/ONBOARDING.md)
 [![No Secrets](https://img.shields.io/badge/Secrets-Zero%20hardcoded-green)](SECURITY.md)
 
-## What it is
-
-A **production-pattern CI/CD template** built on proven enterprise practices using:
-
-- **GitHub Actions** — CI (lint, validate, plan), CD (deploy), Destroy
-- **Terraform** — Remote state on Azure Blob Storage, OIDC auth (no stored secrets)
-- **Azure** — Resource Group + Static Website (Storage Account) + Key Vault (RBAC)
-- **Agentic patterns** — safe-outputs, minimal permissions, SHA-pinned actions, job-level OIDC
+ ## What it is
+ 
+ This repository is a real-world application that consumes the Agentic Reference (or 
+Starter) CI/CD Factory. It leverages:
+ 
+ - **GitHub Actions** — CI (lint, validate, plan), CD (deploy), Destroy, orchestrated 
+by the factory
+ - **Terraform** — Remote state on Azure Blob Storage, OIDC authentication (no stored 
+secrets)
+ - **Azure** — Deploys resources like Resource Groups, Static Websites (Storage 
+Account), and Key Vault (RBAC)
+ - **Agentic patterns** — Safe outputs, minimal permissions, SHA-pinned actions, 
+job-level OIDC
+ 
+ This repo shows how to adopt and operate with the Agentic Factory for secure, 
+production-grade deployments.
 
 ---
 
