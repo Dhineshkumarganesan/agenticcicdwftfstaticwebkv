@@ -49,6 +49,8 @@ We built the factory template and onboarded the consumer repo from it. We close 
 
 ### What we built
 
+The following components span two repositories and five pipeline stages, illustrating the full scope of our intent-driven CI/CD setup:
+
 | Layer | Component | Repo |
 |---|---|---|
 | Intent | `cicd/contract.yml` — declares what to deploy | Consumer |
