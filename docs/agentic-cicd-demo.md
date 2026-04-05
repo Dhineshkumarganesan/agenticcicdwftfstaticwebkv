@@ -42,7 +42,7 @@ The factory template is the **engine** — it provides all the patterns, agents,
 
 ## Overview
 
-In Blog 1 and Blog 2 we built the factory template and onboarded the consumer repo from it. In Blog 3 we close the loop — a developer types a **natural language prompt** in the consumer repo, a Copilot agent reads the `contract.yml` intent file, scaffolds real Terraform, and the CI/CD pipeline deploys a Storage Account static website to **dev**, **test**, and **prod** on Azure — all without touching a single workflow file.
+We built the factory template and onboarded the consumer repo from it. We close the loop — a developer types a **natural language prompt** in the consumer repo, a Copilot agent reads the `contract.yml` intent file, scaffolds real Terraform, and the CI/CD pipeline deploys a Storage Account static website to **dev**, **test**, and **prod** on Azure — all without touching a single workflow file.
 
 ### What we built
 
@@ -332,7 +332,7 @@ git push to main
 | Role | Repo | Description |
 |---|---|---|
 | **Factory template** | [agentic-platform-labs/agentic-cicd-factory-template](https://github.com/agentic-platform-labs/agentic-cicd-factory-template) | The platform — reusable CI/CD patterns, agents, guardrails, setup scripts |
-| **Consumer repo** | [Dhineshkumarganesan/agenticcicdwftfstaticwebkv](https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv) | Blog 3 demo — Storage Account intent declared and deployed from this repo |
+| **Consumer repo** | [Dhineshkumarganesan/agenticcicdwftfstaticwebkv](https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv) | demo — Storage Account intent declared and deployed from this repo |
 
 
 ---
