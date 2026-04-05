@@ -1,7 +1,7 @@
-# Blog 3 — Agentic CI/CD Factory: From Natural Language Prompt to Azure Deployment
+# Agentic CI/CD Factory: From Natural Language Prompt to Azure Deployment
 
 > **Series:** Building an Enterprise-Grade Agentic CI/CD Platform on Azure  
-> **Part 3 of 4** — The full loop: declare intent → agent scaffolds → CI validates → CD deploys
+> The full loop: declare intent → agent scaffolds → CI validates → CD deploys
 
 ---
 
@@ -333,8 +333,7 @@ git push to main
 |---|---|---|
 | **Factory template** | [agentic-platform-labs/agentic-cicd-factory-template](https://github.com/agentic-platform-labs/agentic-cicd-factory-template) | The platform — reusable CI/CD patterns, agents, guardrails, setup scripts |
 | **Consumer repo** | [Dhineshkumarganesan/agenticcicdwftfstaticwebkv](https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv) | Blog 3 demo — Storage Account intent declared and deployed from this repo |
-| **Reference implementation** | [dhineshkumarganeshand/agenticcicdworkflowtf](https://github.com/dhineshkumarganeshand/agenticcicdworkflowtf) | Original Thomas Thornton-style reference this factory is built on |
+
 
 ---
 
-*Next: Blog 4 — Adding the `@azure-architecture-reviewer` agent to enforce architecture decisions as code review gates on every pull request.*
