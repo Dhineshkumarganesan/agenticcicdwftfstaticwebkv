@@ -84,6 +84,7 @@ guardrails:
 ```
 
 > **📸 Screenshot:** `cicd/contract.yml` open in VS Code showing the `resources:` block
+<img width="1060" height="337" alt="image" src="https://github.com/user-attachments/assets/35241dca-ff2e-4976-81ab-49b3924062bf" />
 
 ---
 
