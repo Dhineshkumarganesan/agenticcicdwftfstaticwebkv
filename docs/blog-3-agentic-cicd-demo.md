@@ -5,20 +5,55 @@
 
 ---
 
+## The Two-Repo Architecture
+
+Before diving in, it is important to understand the two-repo model that powers this demo:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  FACTORY TEMPLATE (the platform)                            │
+│  github.com/agentic-platform-labs/agentic-cicd-factory-template │
+│                                                             │
+│  • All reusable CI/CD workflow patterns                     │
+│  • Copilot agents (@terraform-module-expert, etc.)          │
+│  • Guardrail linter (contract_lint.py)                      │
+│  • Setup scripts (OIDC bootstrap, backend, environments)    │
+│  • Skills library                                           │
+│                                                             │
+│  ← Any team "uses this template" to create their repo       │
+└─────────────────────────────────────────────────────────────┘
+                          ↓  "Use this template"
+┌─────────────────────────────────────────────────────────────┐
+│  CONSUMER REPO (the intent processor)                       │
+│  github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv  │
+│                                                             │
+│  • cicd/contract.yml  ← developer declares WHAT to deploy  │
+│  • infra/envs/        ← agent writes the HOW (Terraform)   │
+│  • Own Azure credentials (OIDC, tfstate backend)            │
+│  • Own GitHub Environments (dev / test / prod)              │
+│                                                             │
+│  ← This is where Blog 3 happens                            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+The factory template is the **engine** — it provides all the patterns, agents, and guardrails. The consumer repo is the **driver** — it declares business intent and the factory's CI/CD machinery does the rest. Each consumer repo has its own isolated Azure identity (OIDC), its own tfstate backend, and its own deployment environments.
+
+---
+
 ## Overview
 
-In Blog 1 and Blog 2 we built the factory template and consumer repo scaffolding. In Blog 3 we close the loop — a developer types a **natural language prompt**, a Copilot agent reads the `contract.yml` intent file, scaffolds real Terraform, and the CI/CD pipeline deploys a Storage Account static website to **dev**, **test**, and **prod** on Azure — all without touching a single workflow file.
+In Blog 1 and Blog 2 we built the factory template and onboarded the consumer repo from it. In Blog 3 we close the loop — a developer types a **natural language prompt** in the consumer repo, a Copilot agent reads the `contract.yml` intent file, scaffolds real Terraform, and the CI/CD pipeline deploys a Storage Account static website to **dev**, **test**, and **prod** on Azure — all without touching a single workflow file.
 
 ### What we built
 
-| Layer | Component |
-|---|---|
-| Intent | `cicd/contract.yml` — declares what to deploy |
-| Agent | `@terraform-module-expert` — reads contract, writes Terraform |
-| CI | GitHub Actions — fmt → validate → plan (all 3 envs) |
-| CD | GitHub Actions — deploy dev → test → prod (progressive) |
-| Destroy | GitHub Actions — manual destroy with `DESTROY` confirmation gate |
-| Cloud | Azure Storage Account with static website hosting, LRS, West Europe |
+| Layer | Component | Repo |
+|---|---|---|
+| Intent | `cicd/contract.yml` — declares what to deploy | Consumer |
+| Agent | `@terraform-module-expert` — reads contract, writes Terraform | Factory (agent definition) |
+| CI | GitHub Actions — fmt → validate → plan (all 3 envs) | Consumer (runs factory patterns) |
+| CD | GitHub Actions — deploy dev → test → prod (progressive) | Consumer (runs factory patterns) |
+| Destroy | GitHub Actions — manual destroy with `DESTROY` confirmation gate | Consumer (runs factory patterns) |
+| Cloud | Azure Storage Account with static website hosting, LRS, West Europe | Consumer's Azure subscription |
 
 ---
 
@@ -294,9 +329,11 @@ git push to main
 
 ## Repository Links
 
-- **Consumer repo:** https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv
-- **Factory template:** https://github.com/agentic-platform-labs/agentic-cicd-factory-template
-- **Reference implementation:** https://github.com/dhineshkumarganeshand/agenticcicdworkflowtf
+| Role | Repo | Description |
+|---|---|---|
+| **Factory template** | [agentic-platform-labs/agentic-cicd-factory-template](https://github.com/agentic-platform-labs/agentic-cicd-factory-template) | The platform — reusable CI/CD patterns, agents, guardrails, setup scripts |
+| **Consumer repo** | [Dhineshkumarganesan/agenticcicdwftfstaticwebkv](https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv) | Blog 3 demo — Storage Account intent declared and deployed from this repo |
+| **Reference implementation** | [dhineshkumarganeshand/agenticcicdworkflowtf](https://github.com/dhineshkumarganeshand/agenticcicdworkflowtf) | Original Thomas Thornton-style reference this factory is built on |
 
 ---
 
