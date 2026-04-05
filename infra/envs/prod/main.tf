@@ -28,8 +28,8 @@ locals {
   tags = merge(var.tags, {
     environment = var.environment
     project     = var.project
-    managed-by  = "terraform"
-    source-repo = "agenticcicdwftfstaticwebkv"
+    managed_by  = "terraform"
+    source_repo = "agenticcicdwftfstaticwebkv"
   })
 }
 
