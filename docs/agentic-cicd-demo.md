@@ -86,7 +86,7 @@ guardrails:
 > **📸 Screenshot:** `cicd/contract.yml` open in VS Code showing the `resources:` block
 
  - Figure 1: Declaring deployment intent in cicd/contract.yml (VS Code)
- - 
+
 <img width="1060" height="337" alt="image" src="https://github.com/user-attachments/assets/35241dca-ff2e-4976-81ab-49b3924062bf" />
 
 ---
@@ -117,7 +117,7 @@ The agent read `contract.yml`, checked existing skeleton files, and scaffolded a
 > **📸 Screenshot:** Copilot Chat panel showing the `@terraform-module-expert` prompt and agent response
 
  - Figure 2: Copilot Chat with @terraform-module-expert prompt and agent response
- - 
+
 <img width="1116" height="776" alt="image" src="https://github.com/user-attachments/assets/e65a4b2c-9c31-4fc2-afd9-fdcc1e2689aa" />
 
 Scaffold Summary
@@ -165,6 +165,7 @@ Each Terraform CI job:
 > **📸 Screenshot:** GitHub Actions CI run — all 6 jobs green
 
  - Figure 6: GitHub Actions CI run with all jobs passing (contract lint, Checkov, SBOM,Terraform CI)
+   
 <img width="1814" height="887" alt="image" src="https://github.com/user-attachments/assets/37efb696-fd2e-4eeb-b2fe-1d0fe91d5fe8" />
 
 
