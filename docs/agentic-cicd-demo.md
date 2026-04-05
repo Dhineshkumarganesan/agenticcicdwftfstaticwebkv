@@ -334,6 +334,10 @@ git push to main
 
 > **📸 Screenshot:** GitHub Actions tab showing CI and CD runs side by side
 
+<img width="1912" height="726" alt="image" src="https://github.com/user-attachments/assets/c9c8058f-4371-4372-9259-07a9a99e7588" />
+
+
+
 ---
 
 ## GitHub Secrets & Variables Required
