@@ -12,7 +12,7 @@ Before diving in, it is important to understand the two-repo model that powers t
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  FACTORY TEMPLATE (the platform)                            │
-│  github.com/agentic-platform-labs/agentic-cicd-factory-template │
+│  github.com/Dhineshkumarganesan/agentic-cicd-factory-template │
 │                                                             │
 │  • All reusable CI/CD workflow patterns                     │
 │  • Copilot agents (@terraform-module-expert, etc.)          │
