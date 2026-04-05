@@ -6,6 +6,7 @@ to onboard a real project, configure CI/CD, and manage progressive deployments t
 using GitHub Actions, Infrastructure-as-Code (IaC), and OIDC integration. This repo
 serves as a hands-on example for teams, showing how to adopt the factory for production
 workloads with organization-aligned configuration. Demonstrates how a real project declares intent and consumes the factory.
+This repository demonstrates how CI/CD can be driven by **intent**, not pipelines.
 
 
 ## 📜 Intent Declaration via contract.yml
