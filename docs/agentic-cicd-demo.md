@@ -191,7 +191,8 @@ please take a closer look on the guardrail checks passed output
 
 - Figure 8: Contract Lint job output — all guardrail checks passed
   
-<img width="1906" height="934" alt="image" src="https://github.com/user-attachments/assets/d411848d-4422-4e6e-853d-716c344a4365" />
+<img width="1871" height="922" alt="image" src="https://github.com/user-attachments/assets/a6469004-ca33-4bb3-9955-2b446694d1ed" />
+
 
 ---
 
