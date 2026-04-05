@@ -1,4 +1,4 @@
-# Agentic Reference (or Starter) CI/CD Consumer
+# Agentic CI/CD Consumer Reference Implementation
 
 This repository contains a sample application (e.g., a static website, API, or
 microservice) that is deployed using the Reference CI/CD Factory. It demonstrates how
@@ -6,6 +6,7 @@ to onboard a real project, configure CI/CD, and manage progressive deployments t
 using GitHub Actions, Infrastructure-as-Code (IaC), and OIDC integration. This repo
 serves as a hands-on example for teams, showing how to adopt the factory for production
 workloads with organization-aligned configuration
+Demonstrates how a real project declares intent and consumes the factory.
 
 > **Not affiliated with Microsoft or GitHub. No warranty.**
 
