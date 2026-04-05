@@ -42,6 +42,74 @@ Before diving in, it is important to understand the two-repo model that powers t
 The factory template is the **engine** — it provides all the patterns, agents, and guardrails. The consumer repo is the **driver** — it declares business intent and the factory's CI/CD machinery does the rest. Each consumer repo has its own isolated Azure identity (OIDC), its own tfstate backend, and its own deployment environments.
 
 ---
+## Prerequisites
+
+Before following the CI/CD steps, ensure:
+
+- Azure App Registration with federated credentials for OIDC
+- GitHub repo configured for Actions
+- Terraform and CLI tools installed
+
+## OIDC Setup — The Critical Prerequisite
+
+Before CI/CD can authenticate to Azure, you need to configure **Workload Identity Federation**. This replaces stored secrets with short-lived OIDC tokens — a security best practice.
+
+### App Registration & Federated Credentials
+
+```bash
+# Create the app registration
+az ad app create --display-name "agenticcicdwftfstaticwebkv-oidc"
+
+# Assign Contributor role to the service principal
+az role assignment create \
+  --assignee <APP_CLIENT_ID> \
+  --role Contributor \
+  --scope /subscriptions/<SUBSCRIPTION_ID>
+```
+
+Five federated credentials are required — one per GitHub Actions OIDC context:
+
+| Credential Name | Subject | When Used |
+|---|---|---|
+| `...-main` | `repo:Owner/Repo:ref:refs/heads/main` | CI (branch push) |
+| `...-pr` | `repo:Owner/Repo:pull_request` | CI (pull request) |
+| `...-dev` | `repo:Owner/Repo:environment:dev` | CD deploy-dev |
+| `...-test` | `repo:Owner/Repo:environment:test` | CD deploy-test |
+| `...-prod` | `repo:Owner/Repo:environment:prod` | CD deploy-prod |
+
+### ⚠️ Lesson — Case Sensitivity
+
+GitHub sends the **exact-case** username in OIDC subject claims. Azure AD matching is **case-sensitive**.
+
+```
+# Wrong (lowercase d — will fail):
+repo:dhineshkumarganesan/agenticcicdwftfstaticwebkv:ref:refs/heads/main
+
+# Correct (capital D — matches GitHub):
+repo:Dhineshkumarganesan/agenticcicdwftfstaticwebkv:ref:refs/heads/main
+```
+
+`az ad app federated-credential update` **silently fails** on subject changes. Always use the provided repair script:
+
+```bash
+# If OIDC breaks — one command fix:
+AZURE_CLIENT_ID=<your-app-client-id> bash setup/fix-oidc-subjects.sh
+# Wait 2 minutes for Azure AD propagation, then re-run CI
+```
+
+The script auto-resolves the object ID from the client ID — no manual ID hunting required.
+
+### ⚠️ Lesson — Wrong App Object ID
+
+When patching federated credentials, always derive the object ID from the **same `AZURE_CLIENT_ID`** used in the GitHub secret. Using an unrelated object ID silently patches the wrong app.
+
+- Figure 16: Azure Portal — App Registration "agenticcicdwftfstaticwebkv-oidc" → Federated credentials tab showing all 5 credentials
+
+<img width="1218" height="460" alt="image" src="https://github.com/user-attachments/assets/ae56effd-bc4d-444f-9095-6208ff10a70d" />
+
+
+
+---
 
 ## Overview
 
@@ -269,62 +337,6 @@ To destroy all three environments:
 
 ---
 
-## OIDC Setup — The Critical Prerequisite
-
-Before CI/CD can authenticate to Azure, you need to configure **Workload Identity Federation**. This replaces stored secrets with short-lived OIDC tokens — a security best practice.
-
-### App Registration & Federated Credentials
-
-```bash
-# Create the app registration
-az ad app create --display-name "agenticcicdwftfstaticwebkv-oidc"
-
-# Assign Contributor role to the service principal
-az role assignment create \
-  --assignee <APP_CLIENT_ID> \
-  --role Contributor \
-  --scope /subscriptions/<SUBSCRIPTION_ID>
-```
-
-Five federated credentials are required — one per GitHub Actions OIDC context:
-
-| Credential Name | Subject | When Used |
-|---|---|---|
-| `...-main` | `repo:Owner/Repo:ref:refs/heads/main` | CI (branch push) |
-| `...-pr` | `repo:Owner/Repo:pull_request` | CI (pull request) |
-| `...-dev` | `repo:Owner/Repo:environment:dev` | CD deploy-dev |
-| `...-test` | `repo:Owner/Repo:environment:test` | CD deploy-test |
-| `...-prod` | `repo:Owner/Repo:environment:prod` | CD deploy-prod |
-
-### ⚠️ Lesson Learned — Case Sensitivity
-
-GitHub sends the **exact-case** username in OIDC subject claims. Azure AD matching is **case-sensitive**.
-
-```
-# Wrong (lowercase d — will fail):
-repo:dhineshkumarganesan/agenticcicdwftfstaticwebkv:ref:refs/heads/main
-
-# Correct (capital D — matches GitHub):
-repo:Dhineshkumarganesan/agenticcicdwftfstaticwebkv:ref:refs/heads/main
-```
-
-`az ad app federated-credential update` **silently fails** on subject changes. Always use the provided repair script:
-
-```bash
-# If OIDC breaks — one command fix:
-AZURE_CLIENT_ID=<your-app-client-id> bash setup/fix-oidc-subjects.sh
-# Wait 2 minutes for Azure AD propagation, then re-run CI
-```
-
-The script auto-resolves the object ID from the client ID — no manual ID hunting required.
-
-### ⚠️ Lesson Learned — Wrong App Object ID
-
-When patching federated credentials, always derive the object ID from the **same `AZURE_CLIENT_ID`** used in the GitHub secret. Using an unrelated object ID silently patches the wrong app.
-
-- Figure 16: Azure Portal — App Registration "agenticcicdwftfstaticwebkv-oidc" → Federated credentials tab showing all 5 credentials
-
-<img width="1218" height="460" alt="image" src="https://github.com/user-attachments/assets/ae56effd-bc4d-444f-9095-6208ff10a70d" />
 
 ---
 
