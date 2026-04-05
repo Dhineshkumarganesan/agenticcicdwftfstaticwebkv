@@ -34,10 +34,11 @@ Common mismatches:
 | `repo:owner/repo:ref:refs/heads/feature` | Only `main` push has a federated cred; PRs use `pull_request` |
 | Missing environment credential | You need one per environment: dev, test, prod |
 
-Re-create the credential:
+Re-create the credentials using the repair script:
 ```bash
-az ad app federated-credential delete --id "$APP_ID" --federated-credential-id <ID>
-# Then re-run setup/azure-oidc-bootstrap-one-sp.sh or create manually
+export AZURE_CLIENT_ID="<your-app-client-id>"
+bash setup/fix-oidc-subjects.sh
+# Wait 2 minutes before re-running CI
 ```
 
 ---
@@ -57,9 +58,9 @@ ERROR: Expected exactly 1 app registration named 'my-project-oidc', found 2.
 
 **Fix:**
 ```bash
-# Wait 30 seconds, then retry
+# Wait 30 seconds, then retry from Step 1
 sleep 30
-bash setup/onboard-agenticcicd-newrepo.sh
+bash setup/azure-oidc-bootstrap-one-sp.sh
 ```
 
 **Cause (found 2+):** A previous failed run created a partial registration.
@@ -72,8 +73,8 @@ az ad app list --display-name "my-project-oidc" --query "[].{Name:displayName, A
 # Delete the duplicate(s)
 az ad app delete --id "<duplicate-app-id>"
 
-# Then retry
-bash setup/onboard-agenticcicd-newrepo.sh
+# Then retry Step 1
+bash setup/azure-oidc-bootstrap-one-sp.sh
 ```
 
 ---
@@ -102,7 +103,10 @@ Option B — Have an Entra admin run the OIDC bootstrap step:
 bash setup/azure-oidc-bootstrap-one-sp.sh
 # Then admin provides the APP_ID (client ID) to you
 export AZURE_CLIENT_ID="<provided-by-admin>"
-# You continue with the rest:
+# You continue with the remaining steps:
+export REPO="${GITHUB_OWNER}/${GITHUB_REPO}"
+export AZURE_TENANT_ID="$TENANT_ID"
+export AZURE_SUBSCRIPTION_ID="$SUBSCRIPTION_ID"
 bash setup/terraform-backend-bootstrap.sh
 bash setup/github-secrets-bootstrap.sh
 bash setup/create-github-environments.sh
