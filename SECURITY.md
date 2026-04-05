@@ -2,27 +2,53 @@
 
 ## Reporting a Vulnerability
 
-**Please do not report security vulnerabilities through public GitHub Issues.**
+Please do not report security vulnerabilities through public GitHub Issues.
 
-Use **Security → Advisories → Report a vulnerability** in this repository,
-or contact the maintainer via their GitHub profile.
+Use **Security → Advisories → Report a vulnerability** in this repository, or contact the maintainer via their GitHub profile.
 
-We aim to acknowledge reports within 72 hours and resolve critical issues within 14 days.
+We aim to acknowledge reports within **72 hours** and resolve critical issues within **14 days**.
+
+---
 
 ## Scope
 
+This policy applies to:
+
 - Hardcoded credentials in any committed file
 - Insecure defaults in generated workflows or Terraform
-- OIDC/authentication misconfigurations
+- OIDC / authentication misconfigurations
+- Excessive permissions in workflows or Azure RBAC
+- Supply chain risks in GitHub Actions usage
 
-## Important Notice
+---
 
-> Review all RBAC assignments, replace placeholder values, and apply your
-> organisation's security policy before deploying to production.
+## Security Positioning of This Repository
+
+This repository is designed as a **secure-by-default reference implementation** of an Agentic CI/CD pattern.
+
+It intentionally demonstrates:
+
+- OIDC authentication (no long-lived secrets)
+- Minimal GitHub workflow permissions
+- SHA-pinned GitHub Actions (supply chain protection)
+- Azure RBAC model (no access policies for Key Vault)
+- Remote Terraform state with locking and encryption
+- Separation of intent (consumer) and execution (factory) for governance enforcement
+
+Before using in shared or enterprise environments, teams should review RBAC assignments and align configurations with their organization’s security policies.
+
+---
 
 ## Security Defaults in This Template
 
-- OIDC only — no long-lived secrets stored in GitHub
-- `contents: read` at workflow level; `id-token: write` per deploy job only
-- All GitHub Actions pinned to full commit SHAs
-- Terraform state in Azure Storage with blob-level locking
+| Principle | Implementation |
+|---|---|
+| No long-lived secrets | OIDC only |
+| Minimal permissions | `contents: read` at workflow level, `id-token: write` per job |
+| Supply chain protection | All GitHub Actions pinned to commit SHAs |
+| No hardcoded IDs | Azure identifiers via GitHub Secrets/Variables |
+| Secure state | Azure Storage encryption with blob-level locking |
+
+---
+
+MIT License. Not affiliated with Microsoft or GitHub.
