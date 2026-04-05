@@ -1,15 +1,29 @@
 #!/usr/bin/env bash
 # fix-oidc-subjects.sh
 # Deletes and recreates all 5 federated identity credentials with correct GitHub owner casing.
-# Usage: APP_OBJECT_ID=<app-object-id> bash setup/fix-oidc-subjects.sh
+#
+# Usage (preferred — derives object ID automatically from client ID):
+#   AZURE_CLIENT_ID=<appId> bash setup/fix-oidc-subjects.sh
+#
+# Usage (manual override):
+#   APP_OBJECT_ID=<objectId> bash setup/fix-oidc-subjects.sh
 
 set -euo pipefail
-: "${APP_OBJECT_ID:?Set APP_OBJECT_ID before running}"
 
 OWNER="Dhineshkumarganesan"
 REPO="agenticcicdwftfstaticwebkv"
 ISSUER="https://token.actions.githubusercontent.com"
 AUD="api://AzureADTokenExchange"
+
+# Derive APP_OBJECT_ID from AZURE_CLIENT_ID (appId) if not explicitly provided.
+# This ensures credentials always land on the same app that GitHub Actions authenticates against.
+if [ -z "${APP_OBJECT_ID:-}" ]; then
+  : "${AZURE_CLIENT_ID:?Provide either AZURE_CLIENT_ID (appId) or APP_OBJECT_ID (objectId)}"
+  echo "Resolving object ID from AZURE_CLIENT_ID=${AZURE_CLIENT_ID}..."
+  APP_OBJECT_ID=$(az ad app show --id "${AZURE_CLIENT_ID}" --query "id" -o tsv)
+  echo "Resolved APP_OBJECT_ID=${APP_OBJECT_ID}"
+fi
+
 BASE="https://graph.microsoft.com/v1.0/applications/${APP_OBJECT_ID}/federatedIdentityCredentials"
 
 recreate_fic() {
