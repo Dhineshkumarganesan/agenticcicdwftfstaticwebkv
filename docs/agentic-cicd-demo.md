@@ -113,6 +113,9 @@ The agent read `contract.yml`, checked existing skeleton files, and scaffolded a
 
 > **📸 Screenshot:** Copilot Chat panel showing the `@terraform-module-expert` prompt and agent response
 
+<img width="1116" height="776" alt="image" src="https://github.com/user-attachments/assets/e65a4b2c-9c31-4fc2-afd9-fdcc1e2689aa" />
+
+
 > **📸 Screenshot:** VS Code file explorer showing `infra/envs/dev/main.tf` with scaffolded resources
 
 ---
