@@ -1,6 +1,6 @@
 # Agentic CI/CD Factory: From Natural Language Prompt to Azure Deployment
 
-> **Series:** Building an Enterprise-Grade Agentic CI/CD Platform on Azure  
+> **Series:** Engineering Platforms for the Agentic AI Era  
 > The full loop: declare intent → agent scaffolds → CI validates → CD deploys
 
 ---
