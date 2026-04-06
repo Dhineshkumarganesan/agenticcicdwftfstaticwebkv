@@ -71,9 +71,10 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Upload files to $web
         run: |
+          ls -l ./web
           az storage blob upload-batch \
             --destination '$web' \
-            --source ./web/dev \
+            --source ./web \
             --account-name "${{ steps.tfoutput.outputs.name }}" \
             --auth-mode login
 
@@ -120,9 +121,10 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Upload files to $web
         run: |
+          ls -l ./web
           az storage blob upload-batch \
             --destination '$web' \
-            --source ./web/test \
+            --source ./web \
             --account-name "${{ steps.tfoutput.outputs.name }}" \
             --auth-mode login
 
@@ -169,8 +171,9 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Upload files to $web
         run: |
+          ls -l ./web
           az storage blob upload-batch \
             --destination '$web' \
-            --source ./web/prod \
+            --source ./web \
             --account-name "${{ steps.tfoutput.outputs.name }}" \
             --auth-mode login
