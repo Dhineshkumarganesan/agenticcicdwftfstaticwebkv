@@ -22,6 +22,8 @@ on:
         required: true
       AZURE_SUBSCRIPTION_ID:
         required: true
+      AZURE_CREDENTIALS:  # optional JSON creds for azure/login
+        required: false
 
 jobs:
   deploy:
@@ -33,18 +35,24 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - uses: actions/checkout@v4
 
       - name: Azure Login (OIDC)
-        uses: azure/login@eec3c95657c1536435858eda1f3ff5437fee8474  # v2.3.0
+        uses: azure/login@v2
         with:
           client-id:       ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id:       ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd  # v3.1.2
+        uses: hashicorp/setup-terraform@v3
 
+      # --- Optional cleanup for ephemeral home lab ---
+      - name: Delete old environment RG
+        run: |
+          az group delete -n rg-${{ inputs.environment }} --yes --no-wait || echo "RG not found"
+
+      # --- Terraform Init ---
       - name: Terraform init
         working-directory: ${{ inputs.infra_path }}
         run: |
@@ -54,10 +62,12 @@ jobs:
             -backend-config="container_name=${{ vars.TFSTATE_CONTAINER }}" \
             -backend-config="key=${{ inputs.tf_state_key }}"
 
+      # --- Terraform Apply ---
       - name: Terraform apply
         working-directory: ${{ inputs.infra_path }}
         run: terraform apply -auto-approve
 
+      # --- Capture outputs for reports ---
       - name: Capture Terraform outputs
         if: always()
         working-directory: ${{ inputs.infra_path }}
@@ -67,9 +77,10 @@ jobs:
             > ../../../reports/deploy-${{ inputs.environment }}-output.json 2>/dev/null \
             || echo "{}" > ../../../reports/deploy-${{ inputs.environment }}-output.json
 
+      # --- Upload artifact for evidence ---
       - name: Upload deployment evidence
         if: always()
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1  # v4.6.1
+        uses: actions/upload-artifact@v4
         with:
           name: deploy-evidence-${{ inputs.environment }}-${{ github.run_id }}
           path: reports/deploy-${{ inputs.environment }}-output.json
