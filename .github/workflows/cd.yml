@@ -71,7 +71,9 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Upload files to $web
         run: |
-          ls -l ./web/dev
+          pwd
+          ls -l
+          ls -l ./web || echo "web folder missing"
           az storage blob upload-batch \
             --destination '$web' \
             --source ./web/dev \
@@ -121,7 +123,9 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Upload files to $web
         run: |
-          ls -l ./web/test
+          pwd
+          ls -l
+          ls -l ./web || echo "web folder missing"
           az storage blob upload-batch \
             --destination '$web' \
             --source ./web/test \
@@ -171,7 +175,9 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Upload files to $web
         run: |
-          ls -l ./web/prod
+          pwd
+          ls -l
+          ls -l ./web || echo "web folder missing"
           az storage blob upload-batch \
             --destination '$web' \
             --source ./web/prod \
