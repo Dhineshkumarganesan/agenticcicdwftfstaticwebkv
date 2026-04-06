@@ -43,6 +43,8 @@ jobs:
     if: github.event_name != 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
+      - name: Install Copilot CLI
+        run: npm install -g @githubnext/copilot-cli || pip install copilot-cli || echo 'Copilot CLI install method required'
       - name: Scaffold Terraform code
         run: |
           copilot prompt "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
