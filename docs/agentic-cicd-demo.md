@@ -194,7 +194,7 @@ The agent read `contract.yml`, checked existing skeleton files, and scaffolded a
 
 
 
-- Figure 5: Example how infra/envs/dev/main.tf` file scaffolded by the agent
+- Figure 5: Example how infra/envs/dev/main.tf file scaffolded by the agent
    
 <img width="1052" height="814" alt="image" src="https://github.com/user-attachments/assets/1610de37-2208-4440-af68-0e14d3d61827" />
 
@@ -326,7 +326,7 @@ To destroy all three environments:
 
 <img width="1879" height="787" alt="image" src="https://github.com/user-attachments/assets/b2aaab4c-decc-4478-a6c5-f07214772018" />
 
-- Figure 16: Azure Portal after Resource Groups deletion (clean state).We are left with only terraform state resource group which will be cleaned up at the end
+- Figure 16: Azure Portal after Resource Groups deletion (clean state). We are left with only terraform state resource group which will be cleaned up at the end
 
 <img width="1896" height="592" alt="image" src="https://github.com/user-attachments/assets/d7aac7af-e1e2-4e60-9c65-69b540c2d150" />
 
