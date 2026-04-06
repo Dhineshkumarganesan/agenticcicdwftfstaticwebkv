@@ -189,15 +189,23 @@ def check_workflow(path: str, contract: dict) -> None:
             )
             registry_ok = False
 
+        sha_pinning_required = (
+            contract.get("guardrails", {})
+            .get("allowed_registries", {})
+            .get("sha_pinning_required", True)
+        )
+
         if sha is None:
             _fail(f"Action '{uses}' has no @pin — all actions must be version-pinned")
             pin_ok = False
-        elif not _SHA_RE.match(sha):
+        elif not _SHA_RE.match(sha) and sha_pinning_required:
             _fail(
                 f"Action '{uses}' pinned to '{sha}' — must be a 40-char SHA "
                 f"(not a floating tag) to prevent supply-chain drift"
             )
             pin_ok = False
+        elif not _SHA_RE.match(sha):
+            _ok(f"Action '{uses}' uses floating tag '{sha}' (SHA pinning disabled in contract)")
 
     if registry_ok:
         _ok("All action registries are on the allow-list")
