@@ -1,65 +1,144 @@
-Welcome to my blog! 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intent-Driven Agentic CI/CD</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem;
+      color: #1a1a1a;
+      background: #f9f9f9;
+    }
+    header {
+      background: #0078d4;
+      color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    header h1 { margin: 0 0 0.5rem 0; font-size: 1.8rem; }
+    header p  { margin: 0; opacity: 0.85; }
+    h2 { color: #0078d4; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.5rem; }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .step {
+      background: #0078d4;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .arrow { color: #0078d4; font-size: 1.2rem; font-weight: bold; }
+    .tag {
+      display: inline-block;
+      background: #e8f4fd;
+      color: #0078d4;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin: 0.2rem;
+      font-weight: 600;
+    }
+    .highlight {
+      background: #fff8e1;
+      border-left: 4px solid #f0a500;
+      padding: 1rem 1.5rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+    }
+    footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.85rem;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+    }
+  </style>
+</head>
+<body>
 
-Here, I share my thoughts and experiences on various topics, including technology, programming, and personal development. I hope you find my content informative and engaging. Feel free to explore and leave your comments!
+  <header>
+    <h1>🚀 Intent-Driven Agentic CI/CD</h1>
+    <p>How Natural Language Drives Your Entire Pipeline — from Scaffolding to Deployment</p>
+  </header>
 
+  <div class="card">
+    <h2>The Problem with Traditional CI/CD</h2>
+    <p>Traditional pipelines are rigid. Every build, test, and deployment step must be explicitly defined by a developer — making it hard to scale across projects or adapt to changing requirements.</p>
+    <p><strong>Intent-driven CI/CD</strong> solves this by letting you declare <em>what</em> you want to deploy, and letting the pipeline figure out <em>how</em> to do it automatically.</p>
+  </div>
 
-Intent-Driven Agentic CI/CD: How Natural Language Drives Your Entire Pipeline from Scaffolding to Deployment
+  <div class="card">
+    <h2>The Pipeline Flow</h2>
+    <div class="pipeline">
+      <span class="step">📋 contract.yml</span>
+      <span class="arrow">→</span>
+      <span class="step">🤖 Copilot Agent</span>
+      <span class="arrow">→</span>
+      <span class="step">🏗️ Terraform Scaffold</span>
+      <span class="arrow">→</span>
+      <span class="step">✅ CI Guardrails</span>
+      <span class="arrow">→</span>
+      <span class="step">☁️ Azure Deploy</span>
+      <span class="arrow">→</span>
+      <span class="step">🌐 Live Site</span>
+    </div>
+    <p>The developer only writes <code>contract.yml</code> — everything else is automated.</p>
+  </div>
 
+  <div class="card">
+    <h2>Two-Repo Architecture</h2>
+    <p><strong>Factory Template</strong> — the engine that provides all reusable patterns, agents, and guardrails.</p>
+    <p><strong>Consumer Repo</strong> — the driver that declares business intent. The factory machinery does the rest.</p>
+    <div class="highlight">
+      Each consumer repo gets its own isolated Azure identity (OIDC), its own Terraform state backend, and its own deployment environments.
+    </div>
+  </div>
 
-Traditional CI/CD pipelines are often rigid and require developers to explicitly define every build, test, and deployment step, making it hard to scale across multiple projects or rapidly changing requirements. Intent-driven CI/CD solves this by understanding what you want to deploy and automatically scaffolding the necessary pipeline steps, reducing manual configuration, minimizing errors, and speeding up delivery. This approach is especially valuable in complex, multi-repo, or agentic AI environments where deployments must be dynamic, repeatable, and aligned with business intent.
+  <div class="card">
+    <h2>Key Technologies</h2>
+    <span class="tag">GitHub Actions</span>
+    <span class="tag">Azure Terraform</span>
+    <span class="tag">OIDC Auth</span>
+    <span class="tag">GitHub Copilot</span>
+    <span class="tag">contract_lint.py</span>
+    <span class="tag">Progressive Deployment</span>
+    <span class="tag">Azure Static Website</span>
+    <span class="tag">Terraform State Locking</span>
+  </div>
 
-The Two-Repo Architecture
-Two repositories power this demo — here’s how they fit together:
+  <div class="card">
+    <h2>Lessons Learned</h2>
+    <ul>
+      <li>Use <code>--auth-mode login</code> with OIDC — never store storage keys</li>
+      <li>Assign <code>Storage Blob Data Contributor</code> via Terraform so it recreates daily</li>
+      <li>Use <code>-lock=false</code> on CI <code>terraform plan</code> to avoid state lock conflicts</li>
+      <li>Azure blob leases don't auto-release on pipeline cancellation — break them manually</li>
+      <li>SHA pinning policy enforcement via <code>contract_lint.py</code> catches supply-chain drift early</li>
+    </ul>
+  </div>
 
-┌─────────────────────────────────────────────────────────────┐
-│  FACTORY TEMPLATE (the platform)                            │
-│  github.com/Dhineshkumarganesan/agentic-cicd-factory-template │
-│                                                             │
-│  • All reusable CI/CD workflow patterns                     │
-│  • Copilot agents (@terraform-module-expert, etc.)          │
-│  • Guardrail linter (contract_lint.py)                      │
-│  • Setup scripts (OIDC bootstrap, backend, environments)    │
-│  • Skills library                                           │
-│                                                             │
-│  ← Any team "uses this template" to create their repo       │
-└─────────────────────────────────────────────────────────────┘
-                          ↓  "Use this template"
-┌─────────────────────────────────────────────────────────────┐
-│  CONSUMER REPO (the intent processor)                       │
-│  github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv  │
-│                                                             │
-│  • cicd/contract.yml  ← developer declares WHAT to deploy   │
-│  • infra/envs/        ← agent writes the HOW (Terraform)    │
-│  • Own Azure credentials (OIDC, tfstate backend)            │ 
-│  • Own GitHub Environments (dev / test / prod)              │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-The factory template is the engine — it provides all the patterns, agents, and guardrails. The consumer repo is the driver — it declares business intent and the factory's CI/CD machinery does the rest. Each consumer repo has its own isolated Azure identity (OIDC), its own tfstate backend, and its own deployment environments.Traditional CI/CD pipelines are often rigid and require developers to explicitly define every build, test, and deployment step, making it hard to scale across multiple projects or rapidly changing requirements. Intent-driven CI/CD solves this by understanding what you want to deploy and automatically scaffolding the necessary pipeline steps, reducing manual configuration, minimizing errors, and speeding up delivery. This approach is especially valuable in complex, multi-repo, or agentic AI environments where deployments must be dynamic, repeatable, and aligned with business intent.
+  <footer>
+    <p>Built by Dhinesh Kumar Ganesan · Deployed via Agentic CI/CD · Hosted on Azure Static Website</p>
+  </footer>
 
-The Two-Repo Architecture
-Two repositories power this demo — here’s how they fit together:
-
-┌─────────────────────────────────────────────────────────────┐
-│  FACTORY TEMPLATE (the platform)                            │
-│  github.com/Dhineshkumarganesan/agentic-cicd-factory-template │
-│                                                             │
-│  • All reusable CI/CD workflow patterns                     │
-│  • Copilot agents (@terraform-module-expert, etc.)          │
-│  • Guardrail linter (contract_lint.py)                      │
-│  • Setup scripts (OIDC bootstrap, backend, environments)    │
-│  • Skills library                                           │
-│                                                             │
-│  ← Any team "uses this template" to create their repo       │
-└─────────────────────────────────────────────────────────────┘
-                          ↓  "Use this template"
-┌─────────────────────────────────────────────────────────────┐
-│  CONSUMER REPO (the intent processor)                       │
-│  github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv  │
-│                                                             │
-│  • cicd/contract.yml  ← developer declares WHAT to deploy   │
-│  • infra/envs/        ← agent writes the HOW (Terraform)    │
-│  • Own Azure credentials (OIDC, tfstate backend)            │ 
-│  • Own GitHub Environments (dev / test / prod)              │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-The factory template is the engine — it provides all the patterns, agents, and guardrails. The consumer repo is the driver — it declares business intent and the factory's CI/CD machinery does the rest. Each consumer repo has its own isolated Azure identity (OIDC), its own tfstate backend, and its own deployment environments.
+</body>
+</html>
