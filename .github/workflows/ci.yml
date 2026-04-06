@@ -50,7 +50,7 @@ jobs:
         run: echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Scaffold Terraform code
         run: |
-          copilot prompt "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
+          copilot -p "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
 
   # ---------------------------------------------------------------------------
   # 0. Contract Lint — validate workflows against cicd/contract.yml guardrails
