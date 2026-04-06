@@ -34,36 +34,36 @@ permissions:
   id-token: write
 
 jobs:
-  # ---------------------------------------------------------------------------
-  # -1. Scaffold Terraform from contract.yml
-  # ---------------------------------------------------------------------------
-  scaffold-terraform:
-    name: Scaffold Terraform from contract
-    runs-on: ubuntu-latest
-    if: github.event_name != 'workflow_dispatch'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Copilot CLI
-        run: curl -fsSL https://gh.io/copilot-install | bash
-        shell: bash
-      - name: Add Copilot CLI to PATH
-        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
-      - name: Scaffold Terraform code
-        env:
-          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
-        run: |
-          copilot -p "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
+  # # ---------------------------------------------------------------------------
+  # # -1. Scaffold Terraform from contract.yml
+  # # ---------------------------------------------------------------------------
+  # scaffold-terraform:
+  #   name: Scaffold Terraform from contract
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name != 'workflow_dispatch'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Install Copilot CLI
+  #       run: curl -fsSL https://gh.io/copilot-install | bash
+  #       shell: bash
+  #     - name: Add Copilot CLI to PATH
+  #       run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+  #     - name: Scaffold Terraform code
+  #       env:
+  #         COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+  #       run: |
+  #         copilot -p "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
 
-      - name: Commit and push scaffolded code
-        env:
-          GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}
-        run: |
-          git config --global user.email "ci-bot@example.com"
-          git config --global user.name "ci-bot"
-          git add infra/envs/dev/main.tf infra/envs/test/main.tf infra/envs/prod/main.tf
-          git commit -m "Auto-commit: Scaffolded Terraform code from contract.yml"
-          git push https://x-access-token:${GH_PUSH_TOKEN}@github.com/${{ github.repository }} HEAD:main
-        continue-on-error: true
+  #     - name: Commit and push scaffolded code
+  #       env:
+  #         GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}
+  #       run: |
+  #         git config --global user.email "ci-bot@example.com"
+  #         git config --global user.name "ci-bot"
+  #         git add infra/envs/dev/main.tf infra/envs/test/main.tf infra/envs/prod/main.tf
+  #         git commit -m "Auto-commit: Scaffolded Terraform code from contract.yml"
+  #         git push https://x-access-token:${GH_PUSH_TOKEN}@github.com/${{ github.repository }} HEAD:main
+  #       continue-on-error: true
 
   # ---------------------------------------------------------------------------
   # 0. Contract Lint — validate workflows against cicd/contract.yml guardrails
