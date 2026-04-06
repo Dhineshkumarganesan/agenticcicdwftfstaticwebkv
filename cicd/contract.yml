@@ -59,7 +59,7 @@ guardrails:
 
   # Actions and providers that are permitted in workflows / Terraform
   allowed_registries:
-    sha_pinning_required: false
+    sha_pinning_required: true
     actions:
       - github.com/actions          # actions/checkout, setup-python, etc.
       - github.com/azure            # azure/login
