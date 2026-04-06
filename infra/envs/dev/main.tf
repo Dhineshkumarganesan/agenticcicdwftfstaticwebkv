@@ -61,3 +61,9 @@ resource "azurerm_storage_account" "web" {
 
   tags = local.tags
 }
+
+resource "azurerm_role_assignment" "storage_blob_contributor" {
+  scope                = azurerm_storage_account.web.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
