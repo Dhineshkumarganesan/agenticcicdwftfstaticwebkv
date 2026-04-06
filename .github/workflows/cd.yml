@@ -75,7 +75,7 @@ jobs:
           inlineScript: |
             az storage blob upload-batch \
               --destination '$web' \
-              --source ./web/dev \
+              --source /github/workspace/web/dev \
               --account-name "${{ steps.tfoutput.outputs.name }}" \
               --auth-mode login
 
@@ -125,7 +125,7 @@ jobs:
           inlineScript: |
             az storage blob upload-batch \
               --destination '$web' \
-              --source ./web/test \
+              --source /github/workspace/web/test \
               --account-name "${{ steps.tfoutput.outputs.name }}" \
               --auth-mode login
 
@@ -175,6 +175,6 @@ jobs:
           inlineScript: |
             az storage blob upload-batch \
               --destination '$web' \
-              --source ./web/prod \
+              --source /github/workspace/web/prod \
               --account-name "${{ steps.tfoutput.outputs.name }}" \
               --auth-mode login
