@@ -29,6 +29,7 @@ resources:
       https_only: true
       min_tls_version: TLS1_2
       static_website: true
+      static_website_content_path: ./site-content/
 
 # ── Deployment intent ────────────────────────────────────────────────────────
 pipeline:
