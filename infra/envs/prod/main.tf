@@ -52,8 +52,8 @@ resource "azurerm_storage_account" "web" {
   account_replication_type = "LRS"
   account_kind             = "StorageV2"
 
-  enable_https_traffic_only = true
-  min_tls_version           = "TLS1_2"
+  https_traffic_only_enabled = true
+  min_tls_version            = "TLS1_2"
 
   static_website {
     index_document     = "index.html"
