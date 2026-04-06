@@ -74,8 +74,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Azure CLI
-        uses: azure/CLI@v2
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az --version
       - name: Get storage account name
         id: tfoutput
         run: |
@@ -102,8 +104,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Azure CLI
-        uses: azure/CLI@v2
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az --version
       - name: Get storage account name
         id: tfoutput
         run: |
@@ -130,8 +134,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Azure CLI
-        uses: azure/CLI@v2
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az --version
       - name: Get storage account name
         id: tfoutput
         run: |
