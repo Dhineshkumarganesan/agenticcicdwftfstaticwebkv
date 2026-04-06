@@ -30,12 +30,11 @@ Two repositories power this demo — here’s how they fit together.:
 │  CONSUMER REPO (the intent processor)                       │
 │  github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv  │
 │                                                             │
-│  • cicd/contract.yml  ← developer declares WHAT to deploy  │
-│  • infra/envs/        ← agent writes the HOW (Terraform)   │
-│  • Own Azure credentials (OIDC, tfstate backend)            │
+│  • cicd/contract.yml  ← developer declares WHAT to deploy   │
+│  • infra/envs/        ← agent writes the HOW (Terraform)    │
+│  • Own Azure credentials (OIDC, tfstate backend)            │ 
 │  • Own GitHub Environments (dev / test / prod)              │
 │                                                             │
-│  ← This is where Blog 3 happens                            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
