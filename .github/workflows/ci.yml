@@ -7,12 +7,14 @@ on:
     branches: [main]
     paths:
       - "infra/**"
+      - "cicd/contract.yml"
       - ".github/workflows/ci.yml"
       - ".github/workflows/_reusable-tf-ci.yml"
   pull_request:
     branches: [main]
     paths:
       - "infra/**"
+      - "cicd/contract.yml"
       - ".github/workflows/ci.yml"
       - ".github/workflows/_reusable-tf-ci.yml"
   workflow_dispatch: {}
@@ -32,6 +34,19 @@ permissions:
   id-token: write
 
 jobs:
+  # ---------------------------------------------------------------------------
+  # -1. Scaffold Terraform from contract.yml
+  # ---------------------------------------------------------------------------
+  scaffold-terraform:
+    name: Scaffold Terraform from contract
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scaffold Terraform code
+        run: |
+          copilot prompt "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
+
   # ---------------------------------------------------------------------------
   # 0. Contract Lint — validate workflows against cicd/contract.yml guardrails
   # ---------------------------------------------------------------------------
