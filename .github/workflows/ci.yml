@@ -44,7 +44,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Copilot CLI
-        run: npm install -g @githubnext/copilot-cli || pip install copilot-cli || echo 'Copilot CLI install method required'
+        run: curl -fsSL https://gh.io/copilot-install | bash
+        shell: bash
+      - name: Add Copilot CLI to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Scaffold Terraform code
         run: |
           copilot prompt "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
