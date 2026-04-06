@@ -35,7 +35,7 @@ locals {
 
 # ---------------------------------------------------------------------------
 # Resources — scaffolded via @terraform-module-expert Copilot agent
-# Source: cicd/contract.yml → type: storage_account, purpose: static_website_hosting-test
+# Source: cicd/contract.yml → type: storage_account, purpose: static_website_hosting-prod
 # ---------------------------------------------------------------------------
 
 resource "azurerm_resource_group" "main" {
