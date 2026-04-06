@@ -49,6 +49,8 @@ jobs:
       - name: Add Copilot CLI to PATH
         run: echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Scaffold Terraform code
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: |
           copilot -p "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
 
