@@ -248,8 +248,6 @@ The `Contract Lint` job runs `scripts/contract_lint.py` which validates every wo
 - `security-events:write` scoped to job level only
 - All action orgs on the allowed-registries list
 
-please take a closer look on the guardrail checks passed output
-
 - Figure 9: Contract Lint job output — all guardrail checks passed
   
 <img width="1871" height="922" alt="image" src="https://github.com/user-attachments/assets/a6469004-ca33-4bb3-9955-2b446694d1ed" />
