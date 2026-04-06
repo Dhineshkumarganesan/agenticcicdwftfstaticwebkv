@@ -388,13 +388,14 @@ git push to main
 
 ---
 
-## Repository Links
+## Source Code
 
 | Role | Repo | Description |
 |---|---|---|
 | **Factory template** | [agentic-platform-labs/agentic-cicd-factory-template](https://github.com/agentic-platform-labs/agentic-cicd-factory-template) | The platform — reusable CI/CD patterns, agents, guardrails, setup scripts |
 | **Consumer repo** | [Dhineshkumarganesan/agenticcicdwftfstaticwebkv](https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv) | demo — Storage Account intent declared and deployed from this repo |
 
+Feel free to clone, fork, and raise issues!
 
 ---
 
