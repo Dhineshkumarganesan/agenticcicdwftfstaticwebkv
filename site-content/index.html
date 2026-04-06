@@ -1,3 +1,65 @@
 Welcome to my blog! 
 
 Here, I share my thoughts and experiences on various topics, including technology, programming, and personal development. I hope you find my content informative and engaging. Feel free to explore and leave your comments!
+
+
+Intent-Driven Agentic CI/CD: How Natural Language Drives Your Entire Pipeline from Scaffolding to Deployment
+
+
+Traditional CI/CD pipelines are often rigid and require developers to explicitly define every build, test, and deployment step, making it hard to scale across multiple projects or rapidly changing requirements. Intent-driven CI/CD solves this by understanding what you want to deploy and automatically scaffolding the necessary pipeline steps, reducing manual configuration, minimizing errors, and speeding up delivery. This approach is especially valuable in complex, multi-repo, or agentic AI environments where deployments must be dynamic, repeatable, and aligned with business intent.
+
+The Two-Repo Architecture
+Two repositories power this demo — here’s how they fit together:
+
+┌─────────────────────────────────────────────────────────────┐
+│  FACTORY TEMPLATE (the platform)                            │
+│  github.com/Dhineshkumarganesan/agentic-cicd-factory-template │
+│                                                             │
+│  • All reusable CI/CD workflow patterns                     │
+│  • Copilot agents (@terraform-module-expert, etc.)          │
+│  • Guardrail linter (contract_lint.py)                      │
+│  • Setup scripts (OIDC bootstrap, backend, environments)    │
+│  • Skills library                                           │
+│                                                             │
+│  ← Any team "uses this template" to create their repo       │
+└─────────────────────────────────────────────────────────────┘
+                          ↓  "Use this template"
+┌─────────────────────────────────────────────────────────────┐
+│  CONSUMER REPO (the intent processor)                       │
+│  github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv  │
+│                                                             │
+│  • cicd/contract.yml  ← developer declares WHAT to deploy   │
+│  • infra/envs/        ← agent writes the HOW (Terraform)    │
+│  • Own Azure credentials (OIDC, tfstate backend)            │ 
+│  • Own GitHub Environments (dev / test / prod)              │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+The factory template is the engine — it provides all the patterns, agents, and guardrails. The consumer repo is the driver — it declares business intent and the factory's CI/CD machinery does the rest. Each consumer repo has its own isolated Azure identity (OIDC), its own tfstate backend, and its own deployment environments.Traditional CI/CD pipelines are often rigid and require developers to explicitly define every build, test, and deployment step, making it hard to scale across multiple projects or rapidly changing requirements. Intent-driven CI/CD solves this by understanding what you want to deploy and automatically scaffolding the necessary pipeline steps, reducing manual configuration, minimizing errors, and speeding up delivery. This approach is especially valuable in complex, multi-repo, or agentic AI environments where deployments must be dynamic, repeatable, and aligned with business intent.
+
+The Two-Repo Architecture
+Two repositories power this demo — here’s how they fit together:
+
+┌─────────────────────────────────────────────────────────────┐
+│  FACTORY TEMPLATE (the platform)                            │
+│  github.com/Dhineshkumarganesan/agentic-cicd-factory-template │
+│                                                             │
+│  • All reusable CI/CD workflow patterns                     │
+│  • Copilot agents (@terraform-module-expert, etc.)          │
+│  • Guardrail linter (contract_lint.py)                      │
+│  • Setup scripts (OIDC bootstrap, backend, environments)    │
+│  • Skills library                                           │
+│                                                             │
+│  ← Any team "uses this template" to create their repo       │
+└─────────────────────────────────────────────────────────────┘
+                          ↓  "Use this template"
+┌─────────────────────────────────────────────────────────────┐
+│  CONSUMER REPO (the intent processor)                       │
+│  github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv  │
+│                                                             │
+│  • cicd/contract.yml  ← developer declares WHAT to deploy   │
+│  • infra/envs/        ← agent writes the HOW (Terraform)    │
+│  • Own Azure credentials (OIDC, tfstate backend)            │ 
+│  • Own GitHub Environments (dev / test / prod)              │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+The factory template is the engine — it provides all the patterns, agents, and guardrails. The consumer repo is the driver — it declares business intent and the factory's CI/CD machinery does the rest. Each consumer repo has its own isolated Azure identity (OIDC), its own tfstate backend, and its own deployment environments.
