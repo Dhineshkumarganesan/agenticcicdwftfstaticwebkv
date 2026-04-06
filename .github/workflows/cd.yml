@@ -73,10 +73,9 @@ jobs:
         run: |
           pwd
           ls -l
-          ls -l ./web || echo "web folder missing"
           az storage blob upload-batch \
             --destination '$web' \
-            --source ./web/dev \
+            --source ./site-content\
             --account-name "${{ steps.tfoutput.outputs.name }}" \
             --auth-mode login
 
@@ -125,13 +124,11 @@ jobs:
         run: |
           pwd
           ls -l
-          ls -l ./web || echo "web folder missing"
           az storage blob upload-batch \
             --destination '$web' \
-            --source ./web/test \
+            --source ./site-content\
             --account-name "${{ steps.tfoutput.outputs.name }}" \
             --auth-mode login
-
 
   deploy-prod:
     name: Deploy → prod
@@ -177,9 +174,8 @@ jobs:
         run: |
           pwd
           ls -l
-          ls -l ./web || echo "web folder missing"
           az storage blob upload-batch \
             --destination '$web' \
-            --source ./web/prod \
+            --source ./site-content\
             --account-name "${{ steps.tfoutput.outputs.name }}" \
             --auth-mode login
