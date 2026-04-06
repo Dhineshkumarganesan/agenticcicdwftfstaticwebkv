@@ -61,7 +61,7 @@ jobs:
 
       - name: Terraform plan
         working-directory: ${{ inputs.infra_path }}
-        run: terraform plan -out=tfplan.binary
+        run: terraform plan -lock=false -out=tfplan.binary
 
       - name: Sanitize artifact name
         id: artifact-name
