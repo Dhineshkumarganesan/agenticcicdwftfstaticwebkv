@@ -73,9 +73,10 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
+            cd /github/workspace
             az storage blob upload-batch \
               --destination '$web' \
-              --source /github/workspace/web/dev \
+              --source web/dev \
               --account-name "${{ steps.tfoutput.outputs.name }}" \
               --auth-mode login
 
@@ -123,9 +124,10 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
+            cd /github/workspace
             az storage blob upload-batch \
               --destination '$web' \
-              --source /github/workspace/web/test \
+              --source web/test \
               --account-name "${{ steps.tfoutput.outputs.name }}" \
               --auth-mode login
 
@@ -173,8 +175,9 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
+            cd /github/workspace
             az storage blob upload-batch \
               --destination '$web' \
-              --source /github/workspace/web/prod \
+              --source web/prod \
               --account-name "${{ steps.tfoutput.outputs.name }}" \
               --auth-mode login
