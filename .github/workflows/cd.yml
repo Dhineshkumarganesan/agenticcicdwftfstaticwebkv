@@ -8,6 +8,8 @@ on:
     branches: [main]
     paths:
       - "infra/**"
+      - "web/**"
+      - "cicd/contract.yml"
       - ".github/workflows/cd.yml"
       - ".github/workflows/_reusable-deploy-azure-tf.yml"
   workflow_dispatch:
@@ -65,3 +67,87 @@ jobs:
       infra_path:  infra/envs/prod
       tf_state_key: agenticcicdwftfstaticwebkv/prod.terraform.tfstate
     secrets: inherit
+
+  upload-static-files-dev:
+    name: Upload Static Website Files (dev)
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Azure CLI
+        uses: azure/CLI@v2
+      - name: Get storage account name
+        id: tfoutput
+        run: |
+          cd infra/envs/dev
+          echo "name=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
+          echo "rg=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
+      - name: Get storage account key
+        id: getkey
+        run: |
+          key=$(az storage account keys list --resource-group ${{ steps.tfoutput.outputs.rg }} --account-name ${{ steps.tfoutput.outputs.name }} --query [0].value -o tsv)
+          echo "key=$key" >> $GITHUB_OUTPUT
+      - name: Upload files to $web
+        run: |
+          az storage blob upload-batch \
+            -d '$web' \
+            -s ./web/dev \
+            --account-name ${{ steps.tfoutput.outputs.name }}
+        env:
+          AZURE_STORAGE_KEY: ${{ steps.getkey.outputs.key }}
+
+  upload-static-files-test:
+    name: Upload Static Website Files (test)
+    needs: deploy-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Azure CLI
+        uses: azure/CLI@v2
+      - name: Get storage account name
+        id: tfoutput
+        run: |
+          cd infra/envs/test
+          echo "name=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
+          echo "rg=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
+      - name: Get storage account key
+        id: getkey
+        run: |
+          key=$(az storage account keys list --resource-group ${{ steps.tfoutput.outputs.rg }} --account-name ${{ steps.tfoutput.outputs.name }} --query [0].value -o tsv)
+          echo "key=$key" >> $GITHUB_OUTPUT
+      - name: Upload files to $web
+        run: |
+          az storage blob upload-batch \
+            -d '$web' \
+            -s ./web/test \
+            --account-name ${{ steps.tfoutput.outputs.name }}
+        env:
+          AZURE_STORAGE_KEY: ${{ steps.getkey.outputs.key }}
+
+  upload-static-files-prod:
+    name: Upload Static Website Files (prod)
+    needs: deploy-prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Azure CLI
+        uses: azure/CLI@v2
+      - name: Get storage account name
+        id: tfoutput
+        run: |
+          cd infra/envs/prod
+          echo "name=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
+          echo "rg=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
+      - name: Get storage account key
+        id: getkey
+        run: |
+          key=$(az storage account keys list --resource-group ${{ steps.tfoutput.outputs.rg }} --account-name ${{ steps.tfoutput.outputs.name }} --query [0].value -o tsv)
+          echo "key=$key" >> $GITHUB_OUTPUT
+      - name: Upload files to $web
+        run: |
+          az storage blob upload-batch \
+            -d '$web' \
+            -s ./web/prod \
+            --account-name ${{ steps.tfoutput.outputs.name }}
+        env:
+          AZURE_STORAGE_KEY: ${{ steps.getkey.outputs.key }}
