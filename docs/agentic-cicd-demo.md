@@ -212,7 +212,7 @@ Pushing the scaffolded Terraform to `main` automatically triggered the CI pipeli
 
 ```
 ✅ Contract Lint (guardrails)
-✅ IaC Security Scan (Checkov) ← Checkov is an open-source IaC security scanne
+✅ IaC Security Scan (Checkov) ← Checkov is an open-source IaC security scanner
 ✅ Generate SBOM  ← inventories all dependencies for supply chain auditing
 ✅ Terraform CI — dev  (fmt → validate → plan)
 ✅ Terraform CI — test (fmt → validate → plan)
@@ -223,7 +223,7 @@ Each Terraform CI job:
 1. Authenticates to Azure via **OIDC** (no stored credentials)
 2. Runs `terraform init` pointing at the shared backend state
 3. Runs `terraform validate` — proves the config is syntactically correct
-4. Runs `terraform plan -out=tfplan.binary` — confirms what Azure *would* create   ← saves the approved plan to a file so apply uses exactly what CI reviewed, not a re-calculated version
+4. Runs `terraform plan -out=tfplan.binary` - saves the approved plan to a file so apply uses exactly what CI reviewed, not a re-calculated version
 5. Uploads the plan artifact for audit
 
 - Figure 7: GitHub Actions CI run with all jobs passing (contract lint, Checkov, SBOM,Terraform CI)
