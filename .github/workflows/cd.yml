@@ -9,6 +9,7 @@ on:
     paths:
       - "infra/**"
       - "web/**"
+      - "site-content/**"
       - "cicd/contract.yml"
       - ".github/workflows/cd.yml"
       - ".github/workflows/_reusable-deploy-azure-tf.yml"
