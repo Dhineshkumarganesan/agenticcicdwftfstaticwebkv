@@ -42,6 +42,43 @@ jobs:
       tf_state_key: agenticcicdwftfstaticwebkv/dev.terraform.tfstate
     secrets: inherit
 
+  upload-static-files-dev:
+    name: Upload Static Website Files (dev)
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Download Terraform outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-evidence-dev-${{ github.run_id }}
+          path: tfout
+      - name: Parse Terraform outputs
+        id: tfoutput
+        run: |
+          name=$(jq -r '.storage_account_name.value' tfout/deploy-dev-output.json)
+          echo "name=$name" >> $GITHUB_OUTPUT
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Upload files to $web
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --destination '$web' \
+              --source /github/workspace/web/dev \
+              --account-name "${{ steps.tfoutput.outputs.name }}" \
+              --auth-mode login
+
   deploy-test:
     name: Deploy → test
     needs: deploy-dev
@@ -54,6 +91,43 @@ jobs:
       infra_path:  infra/envs/test
       tf_state_key: agenticcicdwftfstaticwebkv/test.terraform.tfstate
     secrets: inherit
+
+  upload-static-files-test:
+    name: Upload Static Website Files (test)
+    needs: deploy-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Download Terraform outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-evidence-test-${{ github.run_id }}
+          path: tfout
+      - name: Parse Terraform outputs
+        id: tfoutput
+        run: |
+          name=$(jq -r '.storage_account_name.value' tfout/deploy-test-output.json)
+          echo "name=$name" >> $GITHUB_OUTPUT
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Upload files to $web
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --destination '$web' \
+              --source /github/workspace/web/test \
+              --account-name "${{ steps.tfoutput.outputs.name }}" \
+              --auth-mode login
 
   deploy-prod:
     name: Deploy → prod
@@ -68,92 +142,39 @@ jobs:
       tf_state_key: agenticcicdwftfstaticwebkv/prod.terraform.tfstate
     secrets: inherit
 
-  upload-static-files-dev:
-    name: Upload Static Website Files (dev)
-    needs: deploy-dev
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Azure CLI
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          az --version
-      - name: Get storage account name
-        id: tfoutput
-        run: |
-          cd infra/envs/dev
-          echo "name=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
-          echo "rg=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
-      - name: Get storage account key
-        id: getkey
-        run: |
-          key=$(az storage account keys list --resource-group ${{ steps.tfoutput.outputs.rg }} --account-name ${{ steps.tfoutput.outputs.name }} --query [0].value -o tsv)
-          echo "key=$key" >> $GITHUB_OUTPUT
-      - name: Upload files to $web
-        run: |
-          az storage blob upload-batch \
-            -d '$web' \
-            -s ./web/dev \
-            --account-name ${{ steps.tfoutput.outputs.name }}
-        env:
-          AZURE_STORAGE_KEY: ${{ steps.getkey.outputs.key }}
-
-  upload-static-files-test:
-    name: Upload Static Website Files (test)
-    needs: deploy-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Azure CLI
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          az --version
-      - name: Get storage account name
-        id: tfoutput
-        run: |
-          cd infra/envs/test
-          echo "name=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
-          echo "rg=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
-      - name: Get storage account key
-        id: getkey
-        run: |
-          key=$(az storage account keys list --resource-group ${{ steps.tfoutput.outputs.rg }} --account-name ${{ steps.tfoutput.outputs.name }} --query [0].value -o tsv)
-          echo "key=$key" >> $GITHUB_OUTPUT
-      - name: Upload files to $web
-        run: |
-          az storage blob upload-batch \
-            -d '$web' \
-            -s ./web/test \
-            --account-name ${{ steps.tfoutput.outputs.name }}
-        env:
-          AZURE_STORAGE_KEY: ${{ steps.getkey.outputs.key }}
-
   upload-static-files-prod:
     name: Upload Static Website Files (prod)
     needs: deploy-prod
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Azure CLI
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          az --version
-      - name: Get storage account name
+      - uses: actions/checkout@v4
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Download Terraform outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-evidence-prod-${{ github.run_id }}
+          path: tfout
+      - name: Parse Terraform outputs
         id: tfoutput
         run: |
-          cd infra/envs/prod
-          echo "name=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
-          echo "rg=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
-      - name: Get storage account key
-        id: getkey
-        run: |
-          key=$(az storage account keys list --resource-group ${{ steps.tfoutput.outputs.rg }} --account-name ${{ steps.tfoutput.outputs.name }} --query [0].value -o tsv)
-          echo "key=$key" >> $GITHUB_OUTPUT
+          name=$(jq -r '.storage_account_name.value' tfout/deploy-prod-output.json)
+          echo "name=$name" >> $GITHUB_OUTPUT
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Upload files to $web
-        run: |
-          az storage blob upload-batch \
-            -d '$web' \
-            -s ./web/prod \
-            --account-name ${{ steps.tfoutput.outputs.name }}
-        env:
-          AZURE_STORAGE_KEY: ${{ steps.getkey.outputs.key }}
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --destination '$web' \
+              --source /github/workspace/web/prod \
+              --account-name "${{ steps.tfoutput.outputs.name }}" \
+              --auth-mode login
