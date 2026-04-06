@@ -54,6 +54,17 @@ jobs:
         run: |
           copilot -p "@terraform-module-expert Read cicd/contract.yml and scaffold resources into infra/envs/dev/main.tf, infra/envs/test/main.tf, infra/envs/prod/main.tf"
 
+      - name: Commit and push scaffolded code
+        env:
+          GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}
+        run: |
+          git config --global user.email "ci-bot@example.com"
+          git config --global user.name "ci-bot"
+          git add infra/envs/dev/main.tf infra/envs/test/main.tf infra/envs/prod/main.tf
+          git commit -m "Auto-commit: Scaffolded Terraform code from contract.yml"
+          git push https://x-access-token:${GH_PUSH_TOKEN}@github.com/${{ github.repository }} HEAD:main
+        continue-on-error: true
+
   # ---------------------------------------------------------------------------
   # 0. Contract Lint — validate workflows against cicd/contract.yml guardrails
   # ---------------------------------------------------------------------------
