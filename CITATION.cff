@@ -1,0 +1,51 @@
+cff-version: 1.2.0
+title: "Intent-Driven Agentic CI/CD: A Contract-Based Platform Engineering Framework"
+message: "If you use this framework, please cite it using the metadata below."
+type: software
+authors:
+  - family-names: Ganesan
+    given-names: Dhineshkumar
+    alias: dhineshkumarganesan
+    orcid: ""  # Add your ORCID if you have one: https://orcid.org/register
+repository-code: "https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
+url: "https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
+date-released: "2025-04-05"
+version: "1.0.0"
+license: MIT
+abstract: >
+  This repository introduces Intent-Driven Agentic CI/CD — a novel platform engineering
+  paradigm in which application teams declare deployment intent via a structured contract
+  (contract.yml), and an autonomous Agentic CI/CD Factory interprets that intent to decide
+  what to deploy, which Terraform modules to invoke, which workflows to execute, and what
+  governance and validation policies to apply. The framework decouples deployment intent
+  from pipeline implementation, eliminating the need for application teams to author or
+  maintain CI/CD pipelines. The architecture includes reusable GitHub Actions workflows,
+  Copilot-integrated AI agents for Terraform scaffolding and security review, OIDC-only
+  authentication (zero long-lived secrets), and multi-environment (dev/test/prod) promotion
+  orchestrated entirely by the factory. This repository serves as the consumer reference
+  implementation demonstrating the pattern against Azure infrastructure (Static Website,
+  Key Vault, Resource Groups) via Terraform with remote state on Azure Blob Storage.
+keywords:
+  - agentic-cicd
+  - intent-driven-infrastructure
+  - platform-engineering
+  - ci-cd
+  - github-actions
+  - terraform
+  - azure
+  - agentic-ai
+  - contract-driven-deployment
+  - infrastructure-as-code
+  - oidc
+  - zero-secrets
+  - copilot-agents
+  - devops
+preferred-citation:
+  type: software
+  title: "Intent-Driven Agentic CI/CD: A Contract-Based Platform Engineering Framework"
+  authors:
+    - family-names: Ganesan
+      given-names: Dhineshkumar
+  date-released: "2025-04-05"
+  url: "https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
+  license: MIT
