@@ -4,6 +4,11 @@
 > **Status:** Reference consumer repository demonstrating intent-driven deployment using a contract.
 
 ---
+Author
+DHINESH KUMAR GANESHAN
+[Github / LinkedIn ]
+First published: [06-APR-2026]
+---
 
 ## 🚀 What this repository is
 
