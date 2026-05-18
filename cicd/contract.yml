@@ -103,3 +103,60 @@ guardrails:
   manifest_review:
     required: true
     artifact_name_pattern: "workflow-manifest-*"
+
+  # Simulation mode for governance testing: block mutating Azure/deploy commands
+  # so CI can validate policy without creating or changing resources.
+  execution_mode:
+    simulation_only: false
+    blocked_run_patterns:
+      - "terraform apply"
+      - "terraform destroy"
+      - "az group delete"
+      - "az storage blob upload-batch"
+
+# ── Governance & Compliance Policies ──────────────────────────────────────────
+governance:
+  
+  # Compliance checks for all infrastructure
+  compliance:
+    enabled: true
+    agent: compliance-gate
+    
+    # Encryption requirements
+    encryption:
+      storage_account:
+        https_only: true
+        min_tls_version: "TLS1_2"
+      key_vault:
+        purge_protection: true
+      database:
+        transparent_data_encryption: true
+    
+    # Required tagging by environment
+    tagging:
+      prod:
+        required_tags: [environment, project, owner, cost_center, classification]
+        hard_fail: true
+      test:
+        required_tags: [environment, project, owner]
+        hard_fail: false
+      dev:
+        required_tags: [environment, project]
+        hard_fail: false
+    
+    # Naming conventions (regex patterns)
+    naming_conventions:
+      storage_account: "^st[a-z0-9]{1,21}$"
+      key_vault: "^[a-z][a-z0-9-]{1,22}$"
+      virtual_network: "^vnet-[a-z0-9-]{1,}$"
+    
+    # Region restrictions
+    allowed_regions:
+      - westeurope
+      - northeurope
+    
+    # Audit trail
+    audit_trail:
+      enabled: true
+      log_path: "./.github/audit-logs"
+      retention_days: 90

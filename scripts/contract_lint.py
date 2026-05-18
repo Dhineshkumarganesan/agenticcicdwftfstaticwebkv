@@ -99,6 +99,20 @@ def _collect_uses(workflow: dict) -> list[str]:
     return uses
 
 
+def _collect_run_steps(workflow: dict) -> list[tuple[str, str, str]]:
+    """Return every `run:` command found in jobs and steps."""
+    runs: list[tuple[str, str, str]] = []
+    for job_name, job in (workflow.get("jobs") or {}).items():
+        job = job or {}
+        if isinstance(job.get("run"), str):
+            runs.append((f"job:{job_name}", job.get("name") or job_name, job["run"]))
+        for index, step in enumerate(job.get("steps") or [], start=1):
+            if step and isinstance(step.get("run"), str):
+                step_name = step.get("name") or f"step-{index}"
+                runs.append((f"job:{job_name}", step_name, step["run"]))
+    return runs
+
+
 def _action_org(uses_value: str) -> str | None:
     """Extract the GitHub org from a `uses:` action reference."""
     if uses_value.startswith("./.github/"):
@@ -150,6 +164,17 @@ def check_workflow(path: str, contract: dict) -> None:
     ):
         # entry format: "github.com/actions" → org "actions"
         allowed_orgs.add(entry.split("/")[-1])
+
+    execution_mode = contract.get("guardrails", {}).get("execution_mode") or {}
+    simulation_only = bool(execution_mode.get("simulation_only", False))
+    blocked_run_patterns = execution_mode.get("blocked_run_patterns") or []
+    if simulation_only and not blocked_run_patterns:
+        blocked_run_patterns = [
+            "terraform apply",
+            "terraform destroy",
+            "az group delete",
+            "az storage blob upload-batch",
+        ]
 
     # 1. Permissions: no contents:write; no broad write permissions at workflow level
     perms_violations = False
@@ -211,6 +236,22 @@ def check_workflow(path: str, contract: dict) -> None:
         _ok("All action registries are on the allow-list")
     if pin_ok:
         _ok("All actions are SHA-pinned")
+
+    # 3. Simulation-only guardrail: block mutating/deploy commands so the
+    # governance test stays read-only and cannot create or alter Azure resources.
+    if simulation_only:
+        mutating_hits = 0
+        for scope, step_name, command in _collect_run_steps(wf):
+            for pattern in blocked_run_patterns:
+                if pattern in command:
+                    _fail(
+                        f"Simulation-only policy blocks '{pattern}' in {path} "
+                        f"({scope}, step '{step_name}')"
+                    )
+                    mutating_hits += 1
+                    break
+        if mutating_hits == 0:
+            _ok("No blocked mutating commands found")
 
 
 # ─── Check: agent definition ──────────────────────────────────────────────────
