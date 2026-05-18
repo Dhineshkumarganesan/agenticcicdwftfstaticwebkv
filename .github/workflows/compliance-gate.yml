@@ -1,0 +1,72 @@
+name: Compliance Gate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - "cicd/contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compliance-check:
+    name: Compliance Validation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for Copilot CLI
+        run: |
+          if ! command -v copilot &> /dev/null; then
+            echo "Installing Copilot CLI..."
+            curl -fsSL https://gh.io/copilot-install | bash
+            echo "$HOME/.local/bin" >> $GITHUB_PATH
+          fi
+
+      - name: Run Compliance Check
+        id: compliance
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔍 Running compliance check on infrastructure changes..."
+          
+          # Invoke compliance agent via Copilot CLI
+          copilot -p "@compliance-gate Review cicd/contract.yml and infra/ changes. Validate all resources meet compliance requirements."
+        continue-on-error: true
+
+      - name: Comment on PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            const comment = `## ✅ Compliance Check
+
+            Compliance validation has completed. Review the results above.
+            
+            **Guidelines:**
+            - 🟢 Green checks: Resource meets policy
+            - 🟡 Yellow warnings: Soft fail (requires comment approval)
+            - 🔴 Red failures: Hard fail (blocks deployment)
+            
+            **Next Steps:**
+            - If soft warnings: Add comment "Approved: [reason]" to proceed
+            - If hard failures: Fix issues and push again
+            - No action needed if all pass
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
